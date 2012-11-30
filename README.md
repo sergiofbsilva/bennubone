@@ -1,4 +1,4 @@
 bennubone
 =========
 
-js mvc stack for fenix-framework
+js mvc stack using fenix-framework
