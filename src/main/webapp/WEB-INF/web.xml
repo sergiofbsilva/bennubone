@@ -26,4 +26,9 @@
 	    <filter-name>CloseTxFilter</filter-name>
 	    <filter-class>pt.ist.fenixWebFramework.servlets.filters.CloseTransactionFilter</filter-class>
 	</filter>
+	
+	<filter-mapping>
+		<filter-name>CloseTxFilter</filter-name>
+		<url-pattern>/api/*</url-pattern>
+	</filter-mapping>
 </web-app>
