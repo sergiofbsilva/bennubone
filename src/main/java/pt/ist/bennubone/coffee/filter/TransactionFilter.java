@@ -1,8 +1,15 @@
 package pt.ist.bennubone.coffee.filter;
 
-import pt.ist.bennubone.coffee.util.Bootstrap;
 import java.io.IOException;
-import javax.servlet.*;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+import pt.ist.fenixframework.pstm.RequestInfo;
 import pt.ist.fenixframework.pstm.Transaction;
 
 public class TransactionFilter implements Filter {
@@ -12,19 +19,20 @@ public class TransactionFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        Bootstrap.run();
-        Transaction.begin();
-        try {
-            chain.doFilter(request, response);
-        } catch(Exception e) {
-            Transaction.abort();
-            throw (ServletException)e;
-        }
-        Transaction.commit();
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+	    ServletException {
+	try {
+	    Transaction.begin(true);
+	    Transaction.currentFenixTransaction().setReadOnly();
+	    chain.doFilter(request, response);
+	} finally {
+	    Transaction.forceFinish();
+	    RequestInfo.clear();
+	}
     }
 
     @Override
-    public void destroy() {}
+    public void destroy() {
+    }
 
 }

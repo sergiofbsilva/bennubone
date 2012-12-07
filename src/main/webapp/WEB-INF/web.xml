@@ -6,7 +6,7 @@
     <display-name>CoffeeManager</display-name>
     <servlet>
         <servlet-name>coffee-manager-servlet</servlet-name>
-        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <servlet-class>pt.ist.bennubone.coffee.util.Bootstrap</servlet-class>
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
             <param-value>pt.ist.bennubone.coffee.resource</param-value>
@@ -22,14 +22,8 @@
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
 
-    <filter>
-        <filter-name>transaction-filter</filter-name>
-        <filter-class>pt.ist.bennubone.coffee.filter.TransactionFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>transaction-filter</filter-name>
-        <url-pattern>/api/*</url-pattern>
-    </filter-mapping>
-
+	<filter>
+	    <filter-name>CloseTxFilter</filter-name>
+	    <filter-class>pt.ist.fenixWebFramework.servlets.filters.CloseTransactionFilter</filter-class>
+	</filter>
 </web-app>

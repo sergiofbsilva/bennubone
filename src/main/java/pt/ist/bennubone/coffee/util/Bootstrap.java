@@ -1,17 +1,14 @@
 package pt.ist.bennubone.coffee.util;
 
-import pt.ist.bennubone.coffee.domain.CoffeeManager;
-import pt.ist.fenixframework.Config;
 import pt.ist.fenixWebFramework.FenixWebFramework;
 
-public class Bootstrap {
+import com.sun.jersey.spi.container.servlet.ServletContainer;
 
-    public static void run() {
-        try {
-            //FenixWebFramework.bootStrap();
-            //PropertiesManager.getFenixFrameworkConfig();
-        } catch(Error e) {
-                System.err.println("SOMETHINGS WRONG: "+e);
-        }
+public class Bootstrap extends ServletContainer {
+
+    static {
+	System.out.println("Initializing Bennubone.");
+	FenixWebFramework.bootStrap(PropertiesManager.getFenixFrameworkConfig());
     }
+
 }
