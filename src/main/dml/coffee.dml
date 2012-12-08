@@ -9,6 +9,8 @@ valueType java.math.BigDecimal as BigDecimal {
 class CoffeeManager;
 
 class User {
+    String firstName;
+    String lastName;
     String username;
     String passwordHash;
     String salt;

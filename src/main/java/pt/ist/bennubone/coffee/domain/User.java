@@ -7,6 +7,12 @@ public class User extends User_Base {
     public User() {
 	super();
     }
+    
+    public User(String firstName, String lastName, String username) {
+        setFirstName(firstName);
+        setLastName(lastName);
+        setUsername(username);
+    }
 
     public void delete() {
 	setCoffeeManager(null);
@@ -15,8 +21,9 @@ public class User extends User_Base {
 
     public JSONObject json() {
 	JSONObject obj = new JSONObject();
+	obj.put("firstName", getFirstName());
+	obj.put("lastName", getLastName());
 	obj.put("username", getUsername());
-	obj.put("avatar", getAvatar());
 	return obj;
     }
 

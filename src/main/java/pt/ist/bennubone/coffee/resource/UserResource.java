@@ -24,7 +24,7 @@ import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.DomainObject;
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
 
-@Path("/users")
+@Path("/user")
 public class UserResource extends AbstractResource {
 
     // private static final GsonBuilder builder = new
@@ -51,6 +51,12 @@ public class UserResource extends AbstractResource {
 	}
 	return obj;
     }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllUsers() {
+        return Response.ok(readAll()).build();
+    }
 
     @GET
     @Path("/{oid}")
@@ -65,13 +71,11 @@ public class UserResource extends AbstractResource {
     }
 
     private String readAll() {
-	JSONObject obj = new JSONObject();
 	JSONArray users = new JSONArray();
 	for (User user : CoffeeManager.getInstance().getUserSet()) {
 	    users.add(user.json());
 	}
-	obj.put("users", users);
-	return obj.toJSONString();
+	return users.toJSONString();
     }
 
     @POST
