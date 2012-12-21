@@ -14,5 +14,9 @@ public class CoffeeItem extends CoffeeItem_Base {
     	setNumUnits(numUnits);
     	setAvailable(true);
     }
+
+	public BigDecimal calculateTotalPrice() {
+		return getUnitValue().multiply(new BigDecimal(getNumUnits()));
+	}
     
 }

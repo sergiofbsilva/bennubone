@@ -24,10 +24,7 @@ import com.google.gson.JsonObject;
 
 import pt.ist.bennubone.coffee.domain.CoffeeManager;
 import pt.ist.bennubone.coffee.domain.User;
-import pt.ist.bennubone.coffee.domain.exception.OrderNotFoundException;
-import pt.ist.bennubone.coffee.domain.exception.UserNotFoundException;
-import pt.ist.bennubone.coffee.dto.UserDto;
-import pt.ist.bennubone.coffee.util.json.TreeNode;
+import pt.ist.bennubone.coffee.domain.error.CoffeeErrorCode;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.VersionNotAvailableException;
 
@@ -46,68 +43,66 @@ public class UserResource extends AbstractResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUser(@PathParam("oid") String externalId) {        
 		try {
-			String responseString = loadJsonStringFromExternalId(externalId);
-			return Response.ok(responseString).build();
+			return Response.ok(loadJsonStringFromExternalId(externalId)).build();
 		} catch (VersionNotAvailableException vnae) {
-			UserNotFoundException e = new UserNotFoundException(vnae);
-			return Response.status(Response.Status.NOT_FOUND).entity(loadJsonStringFor(e)).build();
+			return errorResponse(CoffeeErrorCode.USER_NOT_FOUND);
 		}
 	}
 
-	@POST
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response create(@FormParam("username") final String username,
-			@FormParam("passwordHash") final String passwordHash,
-			@FormParam("salt") final String salt,
-			@FormParam("avatar") final String avatar) {
-		User user = createUser(username, passwordHash, salt, avatar);
-		return getUser(user.getExternalId());
-	}
+//	@POST
+//	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+//	public Response create(@FormParam("username") final String username,
+//			@FormParam("passwordHash") final String passwordHash,
+//			@FormParam("salt") final String salt,
+//			@FormParam("avatar") final String avatar) {
+//		User user = createUser(username, passwordHash, salt, avatar);
+//		return getUser(user.getExternalId());
+//	}
 
-	@Service
-	private User createUser(final String username, final String passwordHash,
-			final String salt, final String avatar) {
-		User user = new User();
-		setUserSlots(username, passwordHash, salt, avatar, user);
-		return user;
-	}
+//	@Service
+//	private User createUser(final String username, final String passwordHash,
+//			final String salt, final String avatar) {
+//		User user = new User();
+//		setUserSlots(username, passwordHash, salt, avatar, user);
+//		return user;
+//	}
+//
+//	private void setUserSlots(final String username, final String passwordHash,
+//			final String salt, final String avatar, User user) {
+//		user.setUsername(username);
+//		user.setPasswordHash(passwordHash);
+//		user.setAvatar(avatar);
+//		user.setCoffeeManager(CoffeeManager.getInstance());
+//		user.setSalt(salt);
+//	}
 
-	private void setUserSlots(final String username, final String passwordHash,
-			final String salt, final String avatar, User user) {
-		user.setUsername(username);
-		user.setPasswordHash(passwordHash);
-		user.setAvatar(avatar);
-		user.setCoffeeManager(CoffeeManager.getInstance());
-		user.setSalt(salt);
-	}
-
-	@PUT
-	@Path("/{oid}")
-	@Service
-	public Response update(@PathParam("oid") String externalId,
-			@FormParam("username") final String username,
-			@FormParam("passwordHash") final String passwordHash,
-			@FormParam("salt") final String salt,
-			@FormParam("avatar") final String avatar) {
-		checkExternalId(externalId);
-		final User user = readDomainObject(externalId);
-		setUserSlots(username, passwordHash, salt, avatar, user);
-		return Response.ok().build();
-	}
-
-	@DELETE
-	@Path("/{oid}")
-	@Service
-	public Response delete(@PathParam("oid") String externalId) {
-		checkExternalId(externalId);
-		User user = readDomainObject(externalId);
-		user.delete();
-		return Response.ok().build();
-	}
-
-	private void checkExternalId(String externalId) {
-		if (StringUtils.isEmpty(externalId)) {
-			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
-		}
-	}
+//	@PUT
+//	@Path("/{oid}")
+//	@Service
+//	public Response update(@PathParam("oid") String externalId,
+//			@FormParam("username") final String username,
+//			@FormParam("passwordHash") final String passwordHash,
+//			@FormParam("salt") final String salt,
+//			@FormParam("avatar") final String avatar) {
+//		checkExternalId(externalId);
+//		final User user = readDomainObject(externalId);
+//		setUserSlots(username, passwordHash, salt, avatar, user);
+//		return Response.ok().build();
+//	}
+//
+//	@DELETE
+//	@Path("/{oid}")
+//	@Service
+//	public Response delete(@PathParam("oid") String externalId) {
+//		checkExternalId(externalId);
+//		User user = readDomainObject(externalId);
+//		user.delete();
+//		return Response.ok().build();
+//	}
+//
+//	private void checkExternalId(String externalId) {
+//		if (StringUtils.isEmpty(externalId)) {
+//			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+//		}
+//	}
 }

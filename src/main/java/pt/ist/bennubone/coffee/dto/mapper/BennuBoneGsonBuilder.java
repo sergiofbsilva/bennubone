@@ -1,11 +1,13 @@
 package pt.ist.bennubone.coffee.dto.mapper;
 
+import org.joda.time.DateTime;
+
 import pt.ist.bennubone.coffee.domain.CoffeeBatch;
 import pt.ist.bennubone.coffee.domain.CoffeeItem;
 import pt.ist.bennubone.coffee.domain.CoffeeOrder;
 import pt.ist.bennubone.coffee.domain.CoffeeOrderEntry;
 import pt.ist.bennubone.coffee.domain.User;
-import pt.ist.bennubone.coffee.domain.exception.CoffeeManagerException;
+import pt.ist.bennubone.coffee.domain.error.CoffeeErrorCode;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,9 +25,9 @@ public class BennuBoneGsonBuilder {
 		builder.registerTypeAdapter(CoffeeItem.class, new CoffeeItemSerializer());
 		builder.registerTypeAdapter(CoffeeBatch.class, new CoffeeBatchSerializer());
 		builder.registerTypeAdapter(CoffeeOrderEntry.class, new CoffeeOrderEntrySerializer());
-		
-		builder.registerTypeHierarchyAdapter(CoffeeManagerException.class, new ExceptionSerializer());
 
+		builder.registerTypeAdapter(DateTime.class, new DateTimeSerializer());
+		builder.registerTypeHierarchyAdapter(CoffeeErrorCode.class, new CoffeeErrorCodeSerializer());
 	}
 	
 	public String build(Object obj) {

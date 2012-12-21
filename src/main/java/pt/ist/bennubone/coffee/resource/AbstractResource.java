@@ -1,12 +1,14 @@
 package pt.ist.bennubone.coffee.resource;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import pt.ist.bennubone.coffee.domain.CoffeeManager;
+import pt.ist.bennubone.coffee.domain.error.CoffeeErrorCode;
 import pt.ist.bennubone.coffee.dto.mapper.BennuBoneGsonBuilder;
 import pt.ist.fenixframework.DomainObject;
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
@@ -26,6 +28,11 @@ public abstract class AbstractResource {
 			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
 		}
 		return obj;
+	}
+	
+	protected Response errorResponse(CoffeeErrorCode errorCode) {
+		 return Response.status(errorCode.getResponseStatusCode())
+				 .entity(loadJsonStringFor(errorCode)).build();
 	}
 
 	protected CoffeeManager getCoffeeManager() {

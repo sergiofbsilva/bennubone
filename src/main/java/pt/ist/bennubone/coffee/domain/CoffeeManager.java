@@ -19,11 +19,11 @@ public class CoffeeManager extends CoffeeManager_Base {
 		CoffeeItem volluto = new CoffeeItem("Volluto", new BigDecimal(0.375));
 		addCoffeeItem(volluto);
 
-		User david = new User("David", "Martinho", "redox");
+		User david = new User("David", "Martinho", "redox", "davidmartinho@gmail.com");
 		addUser(david);
-		User sergio = new User("Sérgio", "Silva", "ashtray");
+		User sergio = new User("Sérgio", "Silva", "ashtray", "sergiofbsilva@gmail.com");
 		addUser(sergio);
-		User pedro = new User("Pedro", "Santos", "kirk");
+		User pedro = new User("Pedro", "Santos", "kirk", "pedro.san7os@gmail.com");
 		addUser(pedro);
 
 		CoffeeOrder davidOrder = new CoffeeOrder(david);

@@ -16,6 +16,7 @@ public class CoffeeBatchSerializer implements JsonSerializer<CoffeeBatch> {
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("id", coffeeBatch.getOid());
 		jsonObject.addProperty("shippingCharges", coffeeBatch.getShippingCharges());
+		jsonObject.addProperty("numCapsules", coffeeBatch.getTotalCount());
 		jsonObject.add("creationTimestamp", ctx.serialize(coffeeBatch.getCreationTimestamp()));
 		jsonObject.add("sentTimestamp", ctx.serialize(coffeeBatch.getSentTimestamp()));
 		jsonObject.add("receivedTimestamp", ctx.serialize(coffeeBatch.getReceivedTimestamp()));

@@ -7,7 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import pt.ist.bennubone.coffee.domain.exception.OrderNotFoundException;
+import pt.ist.bennubone.coffee.domain.error.CoffeeErrorCode;
 import pt.ist.fenixframework.pstm.VersionNotAvailableException;
 
 @Path("/order")
@@ -18,11 +18,9 @@ public class OrderResource extends AbstractResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getOrder(@PathParam("oid") String externalId) {
 		try {
-			String responseString = loadJsonStringFromExternalId(externalId);
-			return Response.ok(responseString).build();
+			return Response.ok(loadJsonStringFromExternalId(externalId)).build();
 		} catch (VersionNotAvailableException vnae) {
-			OrderNotFoundException e = new OrderNotFoundException(vnae);
-			return Response.status(Response.Status.NOT_FOUND).entity(loadJsonStringFor(e)).build();
+			return errorResponse(CoffeeErrorCode.ORDER_NOT_FOUND);
 		}
 	}
 }
