@@ -3,7 +3,8 @@ var AppRouter = Backbone.Router.extend({
     routes: {
         ""                  : "showHome",
         "home"              : "showHome",
-		"users/list"        : "showUsers",
+		"order/list"        : "showOrders",
+		"user/list"        : "showUsers",
 		"order/create"      : "addOrder"
     },
 
@@ -39,8 +40,17 @@ var AppRouter = Backbone.Router.extend({
             this.userListView = new UserListView();
         }
         $('#content').html(this.userListView.el);
-        this.headerView.selectMenuItem('user-menu'); 
+        this.headerView.selectMenuItem('list-users-menu'); 
+    },
+    
+    showOrders: function() {
+        if (!this.orderListView) {
+            this.orderListView = new OrderListView();
+        }
+        $('#content').html(this.orderListView.el);
+        this.headerView.selectMenuItem('list-orders-menu'); 
     }
+    
 });
 
 utils.loadTemplate([], function() {

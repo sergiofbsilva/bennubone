@@ -20,11 +20,10 @@ class User {
 class CoffeeItem {
     String name;
     String imageUrl;
+    int numUnits;
     BigDecimal unitValue;
     Boolean available;
 }
-
-
 
 class CoffeeOrder;
 
@@ -43,6 +42,11 @@ class CoffeeBatch {
 relation CoffeeManagerHasUsers {
     CoffeeManager playsRole coffeeManager { multiplicity 1..1; }
     User playsRole user { multiplicity 0..*; }
+}
+
+relation CoffeeManagerHasCoffeeItems {
+    CoffeeManager playsRole coffeeManager { multiplicity 1..1; }
+    CoffeeItem playsRole coffeeItem { multiplicity 0..*; }
 }
 
 relation CoffeeManagerHasBatches {

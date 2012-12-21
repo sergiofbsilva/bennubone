@@ -15,7 +15,6 @@ window.UserListView = Backbone.View.extend({
             var users = userCollection.models;
             var len = users.length;
             for (var i = 0; i < len; i++) {
-                console.log(users[i]);
                 $('.users', this.el).append(new UserListItemView({model: users[i]}).render().el);
             }     
         }});
