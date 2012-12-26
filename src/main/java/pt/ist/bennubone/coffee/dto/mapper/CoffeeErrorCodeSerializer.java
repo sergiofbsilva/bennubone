@@ -11,13 +11,12 @@ import com.google.gson.JsonSerializer;
 
 public class CoffeeErrorCodeSerializer implements JsonSerializer<CoffeeErrorCode> {
 
-	@Override
-	public JsonElement serialize(CoffeeErrorCode errorCode, Type type,
-			JsonSerializationContext ctx) {
-		JsonObject jsonObject = new JsonObject();
-		jsonObject.addProperty("errorCode", errorCode.getErrorCode());
-		jsonObject.addProperty("errorDescription", errorCode.getMessage());
-		return jsonObject;
-	}
+    @Override
+    public JsonElement serialize(CoffeeErrorCode errorCode, Type type, JsonSerializationContext ctx) {
+	JsonObject jsonObject = new JsonObject();
+	jsonObject.addProperty("errorCode", errorCode.getErrorCode());
+	jsonObject.addProperty("errorDescription", errorCode.getMessage());
+	return jsonObject;
+    }
 
 }

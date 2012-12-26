@@ -19,17 +19,17 @@ class User {
 }
 
 class CoffeeItem {
-    String name;
+    String name ( REQUIRED );
     String imageUrl;
-    int numUnits;
-    BigDecimal unitValue;
+    int numUnits ( REQUIRED );
+    BigDecimal unitValue ( REQUIRED );
     Boolean available;
 }
 
 class CoffeeOrder;
 
 class CoffeeOrderEntry {
-    int quantity;
+    int quantity ( REQUIRED );
 }
 
 class CoffeeBatch {

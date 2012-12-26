@@ -57,6 +57,7 @@ public class PropertiesManager {
 		dbPassword = properties.getProperty("db.password");
 		domainModelPaths = new String[0];
 		rootClass = CoffeeManager.class;
+		errorfIfDeletingObjectNotDisconnected = true;
 	    }
 
 	    @Override

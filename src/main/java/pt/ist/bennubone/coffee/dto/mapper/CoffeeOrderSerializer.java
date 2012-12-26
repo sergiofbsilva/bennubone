@@ -10,14 +10,13 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 public class CoffeeOrderSerializer implements JsonSerializer<CoffeeOrder> {
-	
-	@Override
-	public JsonElement serialize(CoffeeOrder coffeeOrder, Type type, JsonSerializationContext ctx) {
-		JsonObject jsonObject = new JsonObject();
-		jsonObject.addProperty("id", coffeeOrder.getExternalId());
-		jsonObject.add("owner", ctx.serialize(coffeeOrder.getUser()));
-		return jsonObject;
-	}
 
+    @Override
+    public JsonElement serialize(CoffeeOrder coffeeOrder, Type type, JsonSerializationContext ctx) {
+	JsonObject jsonObject = new JsonObject();
+	jsonObject.addProperty("id", coffeeOrder.getExternalId());
+	jsonObject.add("owner", ctx.serialize(coffeeOrder.getUser()));
+	return jsonObject;
+    }
 
 }

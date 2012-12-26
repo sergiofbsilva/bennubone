@@ -4,48 +4,64 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-
 import pt.ist.bennubone.coffee.domain.CoffeeManager;
 import pt.ist.bennubone.coffee.domain.error.CoffeeErrorCode;
 import pt.ist.bennubone.coffee.dto.mapper.BennuBoneGsonBuilder;
 import pt.ist.fenixframework.DomainObject;
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
-import pt.ist.fenixframework.pstm.VersionNotAvailableException;
+
+import com.google.gson.JsonElement;
 
 public abstract class AbstractResource {
 
-	protected static BennuBoneGsonBuilder builder;
+    protected static BennuBoneGsonBuilder builder;
 
-	static {
-		builder = new BennuBoneGsonBuilder();
-	}
+    static {
+	builder = new BennuBoneGsonBuilder();
+    }
 
-	protected <T extends DomainObject> T readDomainObject(String externalId) {
-		T obj = AbstractDomainObject.fromExternalId(externalId);
-		if (obj == null) {
-			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
-		}
+    protected <T extends DomainObject> T readDomainObject(final String externalId) {
+	boolean error = false;
+	try {
+	    T obj = AbstractDomainObject.fromExternalId(externalId);
+	    if (obj == null) {
+		error = true;
+	    } else {
 		return obj;
+	    }
+	} catch (Throwable t) {
+	    error = true;
+	} finally {
+	    if (error) {
+		throw new WebApplicationException(Response.status(Status.NOT_FOUND)
+			.entity("Couldn't find domain object with oid : " + externalId).build());
+	    }
 	}
-	
-	protected Response errorResponse(CoffeeErrorCode errorCode) {
-		 return Response.status(errorCode.getResponseStatusCode())
-				 .entity(loadJsonStringFor(errorCode)).build();
-	}
+	System.out.println("Unreachable code");
+	return null;
+    }
 
-	protected CoffeeManager getCoffeeManager() {
-		return CoffeeManager.getInstance();
-	}
+    protected Response errorResponse(CoffeeErrorCode errorCode) {
+	return Response.status(errorCode.getResponseStatusCode()).entity(loadJsonStringFor(errorCode)).build();
+    }
 
-	protected String loadJsonStringFor(Object object) {
-		return builder.build(object);
-	}
+    protected CoffeeManager getCoffeeManager() {
+	return CoffeeManager.getInstance();
+    }
 
-	protected String loadJsonStringFromExternalId(String externalId) {
-		DomainObject domainObject = CoffeeManager.fromExternalId(externalId);
-		return loadJsonStringFor(domainObject);
-	}
+    protected String loadJsonStringFor(Object object) {
+	return builder.build(object);
+    }
 
+    protected String loadJsonStringFromExternalId(String externalId) {
+	return loadJsonStringFor(readDomainObject(externalId));
+    }
+
+    protected JsonElement loadJsonTree(Object object) {
+	return builder.buildJsonTree(object);
+    }
+
+    protected <T extends DomainObject> T createFromJson(String jsonData, Class<T> clazz) {
+	return builder.getGson().fromJson(jsonData, clazz);
+    }
 }

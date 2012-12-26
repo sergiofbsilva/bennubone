@@ -11,9 +11,9 @@ import com.google.gson.JsonSerializer;
 
 public class DateTimeSerializer implements JsonSerializer<DateTime> {
 
-	@Override
-	public JsonElement serialize(DateTime timestamp, Type type, JsonSerializationContext ctx) {
-		JsonPrimitive jsonPrimite = new JsonPrimitive(timestamp.toString());
-		return jsonPrimite;
-	}
+    @Override
+    public JsonElement serialize(DateTime timestamp, Type type, JsonSerializationContext ctx) {
+	JsonPrimitive jsonPrimite = new JsonPrimitive(timestamp.toString());
+	return jsonPrimite;
+    }
 }
