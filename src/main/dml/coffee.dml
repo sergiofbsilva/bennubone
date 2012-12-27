@@ -1,0 +1,76 @@
+package pt.ist.bennubone.coffee.domain;
+
+valueType java.math.BigDecimal as BigDecimal {
+    externalizeWith {
+        String toString();
+    }
+}
+
+class CoffeeManager;
+
+class User {
+    String firstName;
+    String lastName;
+    String username;
+    String passwordHash;
+    String salt;
+    String email;
+    String avatar;
+}
+
+class CoffeeItem {
+    String name ( REQUIRED );
+    String imageUrl;
+    int numUnits ( REQUIRED );
+    BigDecimal unitValue ( REQUIRED );
+    Boolean available;
+}
+
+class CoffeeOrder;
+
+class CoffeeOrderEntry {
+    int quantity ( REQUIRED );
+}
+
+class CoffeeBatch {
+    DateTime creationTimestamp;
+	DateTime sentTimestamp;
+	DateTime receivedTimestamp;
+	BigDecimal shippingCharges;
+}
+
+
+relation CoffeeManagerHasUsers {
+    CoffeeManager playsRole coffeeManager { multiplicity 1..1; }
+    User playsRole user { multiplicity 0..*; }
+}
+
+relation CoffeeManagerHasCoffeeItems {
+    CoffeeManager playsRole coffeeManager { multiplicity 1..1; }
+    CoffeeItem playsRole coffeeItem { multiplicity 0..*; }
+}
+
+relation CoffeeManagerHasBatches {
+    CoffeeManager playsRole coffeeManager { multiplicity 1..1; }
+    CoffeeBatch playsRole batch { multiplicity 0..*; }
+}
+
+relation CoffeeBatchesHaveCoffeeOrders {
+    CoffeeBatch playsRole coffeeBatch { multiplicity 1..1; }
+    CoffeeOrder playsRole coffeeOrder { multiplicity 0..*; }
+}
+
+relation UserMakesCoffeeOrders {
+    User playsRole user { multiplicity 1..1; }
+    CoffeeOrder playsRole coffeeOrder { multiplicity 0..*; }
+}
+
+relation CoffeeOrderHasCoffeeOrderEntries {
+    CoffeeOrder playsRole coffeeOrder { multiplicity 1..1; }
+    CoffeeOrderEntry playsRole entry { multiplicity 0..*; }
+}
+
+relation CoffeeOrderEntryHasCoffeeItem {
+    CoffeeItem playsRole item { multiplicity 1..1; }
+    CoffeeOrderEntry playsRole orderEntry { multiplicity 0..*; }
+}
