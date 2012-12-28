@@ -64,4 +64,10 @@ public abstract class AbstractResource {
     protected <T extends DomainObject> T createFromJson(String jsonData, Class<T> clazz) {
 	return builder.getGson().fromJson(jsonData, clazz);
     }
+
+    protected <T extends DomainObject> T editFromJson(String externalId, String jsonData, Class<T> clazz) {
+	T domainObject = AbstractDomainObject.fromExternalId(externalId);
+	return domainObject;
+
+    }
 }

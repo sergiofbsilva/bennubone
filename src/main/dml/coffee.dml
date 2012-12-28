@@ -56,7 +56,7 @@ relation CoffeeManagerHasBatches {
 }
 
 relation CoffeeBatchesHaveCoffeeOrders {
-    CoffeeBatch playsRole coffeeBatch { multiplicity 1..1; }
+    CoffeeBatch playsRole coffeeBatch { multiplicity 0..1; }
     CoffeeOrder playsRole coffeeOrder { multiplicity 0..*; }
 }
 

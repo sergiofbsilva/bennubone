@@ -42,13 +42,20 @@ public class CoffeeOrder extends CoffeeOrder_Base {
 	setEntry(item, entry != null ? entry.getQuantity() + quantity : quantity);
     }
 
-    public void setEntry(CoffeeItem item, int quantity) {
+    private void setEntry(CoffeeItem item, int quantity) {
 	final CoffeeOrderEntry entry = getEntry(item);
 	if (entry != null) {
 	    entry.setQuantity(quantity);
 	} else {
 	    addEntry(new CoffeeOrderEntry(item, quantity));
 	}
+    }
+
+    public void delete() {
+	setUser(null);
+	setCoffeeBatch(null);
+	getEntry().clear();
+	deleteDomainObject();
     }
 
 }

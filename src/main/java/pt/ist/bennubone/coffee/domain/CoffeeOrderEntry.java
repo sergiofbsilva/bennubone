@@ -7,4 +7,10 @@ public class CoffeeOrderEntry extends CoffeeOrderEntry_Base {
 	setQuantity(quantity);
     }
 
+    public void delete() {
+	setCoffeeOrder(null);
+	setItem(null);
+	deleteDomainObject();
+    }
+
 }
