@@ -25,6 +25,7 @@ public class CoffeeItemAdapter {
 	    jsonObject.addProperty("name", coffeeItem.getName());
 	    jsonObject.addProperty("imageUrl", coffeeItem.getImageUrl());
 	    jsonObject.addProperty("unitValue", coffeeItem.getUnitValue());
+	    jsonObject.addProperty("numUnits", coffeeItem.getNumUnits());
 	    return jsonObject;
 	}
     }

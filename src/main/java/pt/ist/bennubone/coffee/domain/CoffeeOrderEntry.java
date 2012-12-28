@@ -1,5 +1,7 @@
 package pt.ist.bennubone.coffee.domain;
 
+import java.math.BigDecimal;
+
 public class CoffeeOrderEntry extends CoffeeOrderEntry_Base {
 
     public CoffeeOrderEntry(CoffeeItem item, int quantity) {
@@ -11,6 +13,10 @@ public class CoffeeOrderEntry extends CoffeeOrderEntry_Base {
 	setCoffeeOrder(null);
 	setItem(null);
 	deleteDomainObject();
+    }
+
+    public BigDecimal getTotal() {
+	return getItem().getUnitValue().multiply(new BigDecimal(getItem().getNumUnits())).multiply(new BigDecimal(getQuantity()));
     }
 
 }

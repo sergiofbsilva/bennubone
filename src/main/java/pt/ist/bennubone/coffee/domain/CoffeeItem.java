@@ -21,6 +21,11 @@ public class CoffeeItem extends CoffeeItem_Base {
 	this(name, unitValue, 10);
     }
 
+    public CoffeeItem(String name, String imageUrl, BigDecimal unitValue) {
+	this(name, unitValue);
+	setImageUrl(imageUrl);
+    }
+
     public CoffeeItem(String name, BigDecimal unitValue, int numUnits) {
 	setName(name);
 	setUnitValue(unitValue);

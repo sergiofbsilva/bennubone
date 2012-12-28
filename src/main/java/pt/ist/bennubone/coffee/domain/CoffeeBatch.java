@@ -35,7 +35,7 @@ public class CoffeeBatch extends CoffeeBatch_Base {
     public int getTotalCount() {
 	int totalCount = 0;
 	for (CoffeeOrder coffeeOrder : getCoffeeOrderSet()) {
-	    totalCount += coffeeOrder.getTotalCount();
+	    totalCount += coffeeOrder.getCount();
 	}
 	return totalCount;
     }
@@ -43,7 +43,7 @@ public class CoffeeBatch extends CoffeeBatch_Base {
     public BigDecimal calculateTotal() {
 	BigDecimal total = new BigDecimal(0.0);
 	for (CoffeeOrder coffeeOrder : getCoffeeOrderSet()) {
-	    total.add(coffeeOrder.calculateTotal());
+	    total.add(coffeeOrder.getTotal());
 	}
 	return total;
     }

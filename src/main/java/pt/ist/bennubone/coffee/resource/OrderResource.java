@@ -28,6 +28,12 @@ import com.google.gson.JsonParser;
 public class OrderResource extends AbstractResource {
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOrders() {
+	return Response.ok(loadJsonStringFor(getRequestAuthor().getCoffeeOrder())).build();
+    }
+
+    @GET
     @Path("/{oid}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOrder(@PathParam("oid") String externalId) {

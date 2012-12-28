@@ -12,7 +12,7 @@ window.OrderListView = Backbone.View.extend({
         
         var orderCollection = new OrderCollection();
         orderCollection.fetch({ success: function() {
-            var orders = userCollection.models;
+            var orders = orderCollection.models;
             var len = orders.length;
             for (var i = 0; i < len; i++) {
                 $('.orders', this.el).append(new OrderListItemView({model: orders[i]}).render().el);

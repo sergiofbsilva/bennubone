@@ -26,9 +26,10 @@ public class CoffeeOrderAdapter {
 	    jsonObject.addProperty("id", coffeeOrder.getExternalId());
 	    jsonObject.add("owner", ctx.serialize(coffeeOrder.getUser()));
 	    jsonObject.add("entries", ctx.serialize(coffeeOrder.getEntry()));
+	    jsonObject.addProperty("total", coffeeOrder.getTotal());
+	    jsonObject.addProperty("count", coffeeOrder.getCount());
 	    return jsonObject;
 	}
-
     }
 
     public static class CoffeeOrderDeserializer implements JsonDeserializer<CoffeeOrder> {
