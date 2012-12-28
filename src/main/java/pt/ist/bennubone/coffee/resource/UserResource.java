@@ -10,8 +10,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import pt.ist.bennubone.coffee.domain.User;
-import pt.ist.bennubone.coffee.domain.error.CoffeeErrorCode;
-import pt.ist.fenixframework.pstm.VersionNotAvailableException;
 
 @Path("/users")
 public class UserResource extends AbstractResource {
@@ -19,6 +17,7 @@ public class UserResource extends AbstractResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllUsers() {
+	getRequestAuthor();
 	Set<User> userSet = getCoffeeManager().getUserSet();
 	return Response.ok(loadJsonStringFor(userSet)).build();
     }
@@ -26,12 +25,9 @@ public class UserResource extends AbstractResource {
     @GET
     @Path("/{oid}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUser(@PathParam("oid") String externalId) {
-	try {
-	    return Response.ok(loadJsonStringFromExternalId(externalId)).build();
-	} catch (VersionNotAvailableException vnae) {
-	    return errorResponse(CoffeeErrorCode.USER_NOT_FOUND);
-	}
+    public Response getUser(@PathParam("oid")
+    String externalId) {
+	return Response.ok(loadJsonStringFromExternalId(externalId)).build();
     }
 
     // @POST

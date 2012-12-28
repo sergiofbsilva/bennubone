@@ -7,7 +7,6 @@ import pt.ist.bennubone.coffee.domain.CoffeeItem;
 import pt.ist.bennubone.coffee.domain.CoffeeOrder;
 import pt.ist.bennubone.coffee.domain.CoffeeOrderEntry;
 import pt.ist.bennubone.coffee.domain.User;
-import pt.ist.bennubone.coffee.domain.error.CoffeeErrorCode;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -30,7 +29,7 @@ public class BennuBoneGsonBuilder {
 	builder.registerTypeAdapter(CoffeeBatch.class, new CoffeeBatchSerializer());
 	builder.registerTypeAdapter(CoffeeOrderEntry.class, new CoffeeOrderEntrySerializer());
 	builder.registerTypeAdapter(DateTime.class, new DateTimeSerializer());
-	builder.registerTypeHierarchyAdapter(CoffeeErrorCode.class, new CoffeeErrorCodeSerializer());
+
 	gson = builder.create();
     }
 

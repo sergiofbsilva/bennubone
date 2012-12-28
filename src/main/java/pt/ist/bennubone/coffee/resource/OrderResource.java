@@ -17,9 +17,7 @@ import pt.ist.bennubone.coffee.domain.CoffeeItem;
 import pt.ist.bennubone.coffee.domain.CoffeeOrder;
 import pt.ist.bennubone.coffee.domain.CoffeeOrderEntry;
 import pt.ist.bennubone.coffee.domain.User;
-import pt.ist.bennubone.coffee.domain.error.CoffeeErrorCode;
 import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.pstm.VersionNotAvailableException;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -33,11 +31,7 @@ public class OrderResource extends AbstractResource {
     @Path("/{oid}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOrder(@PathParam("oid") String externalId) {
-	try {
-	    return Response.ok(loadJsonStringFromExternalId(externalId)).build();
-	} catch (VersionNotAvailableException vnae) {
-	    return errorResponse(CoffeeErrorCode.ORDER_NOT_FOUND);
-	}
+	return Response.ok(loadJsonStringFromExternalId(externalId)).build();
     }
 
     @POST

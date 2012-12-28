@@ -2,6 +2,7 @@ package pt.ist.bennubone.coffee.domain;
 
 import java.math.BigDecimal;
 
+import pt.ist.bennubone.coffee.util.CoffeeManagerUtils;
 import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.FenixFramework;
 
@@ -37,9 +38,9 @@ public class CoffeeManager extends CoffeeManager_Base {
 	    CoffeeItem livanto = new CoffeeItem("Livanto", new BigDecimal(0.375));
 	    new CoffeeItem("Volluto", new BigDecimal(0.375));
 
-	    User david = new User("David", "Martinho", "redox", "davidmartinho@gmail.com");
-	    User sergio = new User("Sérgio", "Silva", "ashtray", "sergiofbsilva@gmail.com");
-	    User pedro = new User("Pedro", "Santos", "kirk", "pedro.san7os@gmail.com");
+	    User david = new User("David Martinho", "davidmartinho@gmail.com", "pass");
+	    User sergio = new User("Sérgio Silva", "sergiofbsilva@gmail.com", "pass");
+	    User pedro = new User("Pedro Santos", "pedro.san7os@gmail.com", "pass");
 
 	    CoffeeOrder davidOrder = new CoffeeOrder(david);
 	    davidOrder.addEntry(ristretto, 2);
@@ -59,4 +60,17 @@ public class CoffeeManager extends CoffeeManager_Base {
 	return false;
     }
 
+    public User login(String email, String password) {
+	for (User user : getUserSet()) {
+	    if (user.getEmail().equals(email)) {
+		String passwordHash = CoffeeManagerUtils.calculatePasswordHash(password, user.getSalt());
+		if (passwordHash.equals(user.getPasswordHash())) {
+		    return user;
+		} else {
+		    return null;
+		}
+	    }
+	}
+	return null;
+    }
 }

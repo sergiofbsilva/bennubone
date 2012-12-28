@@ -1,4 +1,4 @@
-window.UserListItemView = Backbone.View.extend({
+window.OrderListItemView = Backbone.View.extend({
 
     tagName: "tr",
 
@@ -8,7 +8,8 @@ window.UserListItemView = Backbone.View.extend({
 
     render: function () {
         var that = this;
-        utils.loadTemplate(['UserListItemView'], function() {
+        console.log(that.model.toJSON());
+        utils.loadTemplate(['OrderListItemView'], function() {
             that.$el.html(that.template(that.model.toJSON()));
         });
         
