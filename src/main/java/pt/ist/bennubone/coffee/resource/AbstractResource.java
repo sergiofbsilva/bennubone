@@ -1,12 +1,15 @@
 package pt.ist.bennubone.coffee.resource;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import java.security.Principal;
+
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 
 import pt.ist.bennubone.coffee.domain.CoffeeManager;
-import pt.ist.bennubone.coffee.domain.error.CoffeeErrorCode;
+import pt.ist.bennubone.coffee.domain.User;
 import pt.ist.bennubone.coffee.dto.mapper.BennuBoneGsonBuilder;
+import pt.ist.bennubone.coffee.exception.BennuBoneException;
+import pt.ist.bennubone.coffee.exception.CoffeeManagerError;
 import pt.ist.fenixframework.DomainObject;
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
 
@@ -19,6 +22,9 @@ public abstract class AbstractResource {
     static {
 	builder = new BennuBoneGsonBuilder();
     }
+
+    @Context
+    private SecurityContext securityContext;
 
     protected <T extends DomainObject> T readDomainObject(final String externalId) {
 	boolean error = false;
@@ -33,16 +39,19 @@ public abstract class AbstractResource {
 	    error = true;
 	} finally {
 	    if (error) {
-		throw new WebApplicationException(Response.status(Status.NOT_FOUND)
-			.entity("Couldn't find domain object with oid : " + externalId).build());
+		throw new BennuBoneException(CoffeeManagerError.DOMAIN_OBJECT_NOT_FOUND);
 	    }
 	}
 	System.out.println("Unreachable code");
 	return null;
     }
 
-    protected Response errorResponse(CoffeeErrorCode errorCode) {
-	return Response.status(errorCode.getResponseStatusCode()).entity(loadJsonStringFor(errorCode)).build();
+    public User getRequestAuthor() {
+	Principal principal = securityContext.getUserPrincipal();
+	if (principal == null || principal.getName() == null) {
+	    throw new BennuBoneException(CoffeeManagerError.NOT_AUTHORIZED);
+	}
+	return readDomainObject(securityContext.getUserPrincipal().getName());
     }
 
     protected CoffeeManager getCoffeeManager() {

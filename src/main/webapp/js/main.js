@@ -36,10 +36,8 @@ var AppRouter = Backbone.Router.extend({
     },
 
     showUsers: function() {
-        if (!this.userListView) {
-            this.userListView = new UserListView();
-        }
-        $('#content').html(this.userListView.el);
+        var userListView = new UserListView();
+        $('#content').html(userListView.el);
         this.headerView.selectMenuItem('list-users-menu'); 
     },
     
