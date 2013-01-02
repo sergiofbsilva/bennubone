@@ -14,6 +14,7 @@ import pt.ist.fenixframework.DomainObject;
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public abstract class AbstractResource {
 
@@ -66,7 +67,7 @@ public abstract class AbstractResource {
 	return loadJsonStringFor(readDomainObject(externalId));
     }
 
-    protected JsonElement loadJsonTree(Object object) {
+    private JsonElement loadJsonTree(Object object) {
 	return builder.buildJsonTree(object);
     }
 
@@ -78,5 +79,16 @@ public abstract class AbstractResource {
 	T domainObject = AbstractDomainObject.fromExternalId(externalId);
 	return domainObject;
 
+    }
+
+    protected String toJson(JsonElement jsonElement) {
+	return builder.getGson().toJson(jsonElement);
+    }
+
+    protected String toJson(String field, Object obj) {
+	final JsonObject jsonObj = new JsonObject();
+	final JsonElement jsonTree = loadJsonTree(obj);
+	jsonObj.add(field, jsonTree);
+	return toJson(jsonObj);
     }
 }

@@ -22,11 +22,9 @@ public class BennuBoneGsonBuilder {
 	builder.serializeNulls();
 	builder.setPrettyPrinting();
 	builder.registerTypeAdapter(User.class, new UserSerializer());
-	builder.registerTypeAdapter(CoffeeOrder.class, new CoffeeOrderAdapter.CoffeeOrderSerializer());
-	builder.registerTypeAdapter(CoffeeOrder.class, new CoffeeOrderAdapter.CoffeeOrderDeserializer());
-	builder.registerTypeAdapter(CoffeeItem.class, new CoffeeItemAdapter.CoffeeItemSerializer());
-	builder.registerTypeAdapter(CoffeeItem.class, new CoffeeItemAdapter.CoffeeItemDeserializer());
-	builder.registerTypeAdapter(CoffeeBatch.class, new CoffeeBatchSerializer());
+	builder.registerTypeAdapter(CoffeeOrder.class, new CoffeeOrderAdapter());
+	builder.registerTypeAdapter(CoffeeItem.class, new CoffeeItemAdapter());
+	builder.registerTypeAdapter(CoffeeBatch.class, new CoffeeBatchAdapter());
 	builder.registerTypeAdapter(CoffeeOrderEntry.class, new CoffeeOrderEntrySerializer());
 	builder.registerTypeAdapter(DateTime.class, new DateTimeSerializer());
 

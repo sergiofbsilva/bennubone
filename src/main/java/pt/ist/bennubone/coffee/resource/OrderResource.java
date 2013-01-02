@@ -30,7 +30,7 @@ public class OrderResource extends AbstractResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOrders() {
-	return Response.ok(loadJsonStringFor(getRequestAuthor().getCoffeeOrder())).build();
+	return Response.ok(toJson("orders", getRequestAuthor().getCoffeeOrder())).build();
     }
 
     @GET

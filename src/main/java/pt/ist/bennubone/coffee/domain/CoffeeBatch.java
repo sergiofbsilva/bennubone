@@ -7,7 +7,8 @@ import org.joda.time.DateTime;
 public class CoffeeBatch extends CoffeeBatch_Base {
 
     public CoffeeBatch() {
-	this.setCreationTimestamp(new DateTime());
+	setCoffeeManager(CoffeeManager.getInstance());
+	setCreationTimestamp(new DateTime());
     }
 
     public CoffeeBatch(CoffeeOrder... coffeeOrders) {
@@ -46,5 +47,10 @@ public class CoffeeBatch extends CoffeeBatch_Base {
 	    total.add(coffeeOrder.getTotal());
 	}
 	return total;
+    }
+
+    public void delete() {
+	getCoffeeOrder().clear();
+	deleteDomainObject();
     }
 }

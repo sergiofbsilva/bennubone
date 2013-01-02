@@ -1,15 +1,11 @@
 package pt.ist.bennubone.coffee.resource;
 
-import java.util.Set;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import pt.ist.bennubone.coffee.domain.User;
 
 @Path("/users")
 public class UserResource extends AbstractResource {
@@ -18,15 +14,13 @@ public class UserResource extends AbstractResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllUsers() {
 	getRequestAuthor();
-	Set<User> userSet = getCoffeeManager().getUserSet();
-	return Response.ok(loadJsonStringFor(userSet)).build();
+	return Response.ok(toJson("users", getCoffeeManager().getUserSet())).build();
     }
 
     @GET
     @Path("/{oid}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUser(@PathParam("oid")
-    String externalId) {
+    public Response getUser(@PathParam("oid") String externalId) {
 	return Response.ok(loadJsonStringFromExternalId(externalId)).build();
     }
 

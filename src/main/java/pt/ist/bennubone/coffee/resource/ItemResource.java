@@ -1,7 +1,6 @@
 package pt.ist.bennubone.coffee.resource;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -37,10 +36,7 @@ public class ItemResource extends AbstractResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllItems() {
-	JsonObject obj = new JsonObject();
-	final Set<CoffeeItem> items = CoffeeManager.getInstance().getCoffeeItemSet();
-	obj.add("items", loadJsonTree(items));
-	return Response.ok(obj.toString()).build();
+	return Response.ok(toJson("items", CoffeeManager.getInstance().getCoffeeItemSet())).build();
     }
 
     @PUT
