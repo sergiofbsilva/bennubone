@@ -57,4 +57,8 @@ public class CoffeeOrder extends CoffeeOrder_Base {
 	deleteDomainObject();
     }
 
+    public Boolean isBatched() {
+	return hasCoffeeBatch();
+    }
+
 }

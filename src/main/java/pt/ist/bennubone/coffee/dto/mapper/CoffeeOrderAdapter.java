@@ -26,6 +26,7 @@ public class CoffeeOrderAdapter implements JsonSerializer<CoffeeOrder>, JsonDese
 	jsonObject.add("entries", ctx.serialize(coffeeOrder.getEntry()));
 	jsonObject.addProperty("total", coffeeOrder.getTotal());
 	jsonObject.addProperty("count", coffeeOrder.getCount());
+	jsonObject.addProperty("batched", coffeeOrder.isBatched());
 	return jsonObject;
     }
 

@@ -1,11 +1,40 @@
+<ul class="nav nav-pills">
+  <li class="active">
+    <a id='show-all' href="#">All</a>
+  </li>
+  <li><a id='show-batched' href="#">Batched</a></li>
+  <li><a id='show-unbatched' href="#">Unbatched</a></li>
+</ul>
 <table class="table">
     <thead>
         <tr>
-            <th>Owner Name</th>
-            <th>Total</th>
-            <th>Count</th>
+            <th>#</th>
+            <th>€</th>
+            <th>Actions</th>
         </tr>
     </thead>
-    <tbody class="orders">
+    <tbody>
+    {{#orders}}
+		<tr>
+			<td>{{total}}</td>
+			<td>{{count}}</td>
+			<td><button id='{{id}}' class='btn btn-info btn-mini show-order'><i class='icon-zoom-in'></i> View Order</button></td>
+		</tr>
+	{{/orders}}
     </tbody>
 </table>
+
+<div class="span12">    
+    <form>
+      <fieldset>
+        <legend>Mandar vir Café</legend>
+        <label>Café</label>
+        <input type="text" placeholder="Nome do Café">
+        <span class="help-block">Nome do café a ser encomendado.</span>
+        <label class="checkbox">
+          <input type="checkbox"> Notificar-me por email quando o estado da encomenda mudar.
+        </label>
+        <button type="submit" class="btn">Encomendar</button>
+      </fieldset>
+    </form>
+</div>

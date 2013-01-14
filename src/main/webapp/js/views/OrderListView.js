@@ -1,23 +1,37 @@
-window.OrderListView = Backbone.View.extend({
-
-    initialize: function () {
-       this.render();
-    },
-
-    render: function () {
-        var that = this;
+var OrderListView = Backbone.View.extend({
+	initialize : function() {
+		this.render();
+	},
+	
+	events: {
+	    "click #show-all"		: 	"showAll",
+	    "click #show-batched"	:   "showBatched",
+	    "click #show-unbatched"	: 	"showUnbatched",
+	    "click .show-order"		: 	"showOrder"
+	  },
+	
+	render : function() {
+		var that = this;
         utils.loadTemplate(['OrderListView'], function() {
-            that.$el.html(that.template());
+            that.$el.html(that.template({orders : that.collection.toJSON()}));
         });
-        
-        var orderCollection = new OrderCollection();
-        orderCollection.fetch({ success: function() {
-            var orders = orderCollection.models;
-            var len = orders.length;
-            for (var i = 0; i < len; i++) {
-                $('.orders', this.el).append(new OrderListItemView({model: orders[i]}).render().el);
-            }     
-        }});
         return this;
-    }
+	},
+	
+	showAll : function (e) {
+		
+	},
+	
+	showBatched : function (e) {
+		
+	},
+	
+	showUnbatched : function (e) {
+		
+	},
+	
+	showOrder : function (e) {
+		console.log("show order" +"#orders/" + e.t);
+		app.navigate("#orders/" + e.target.id, true);
+	}
 });

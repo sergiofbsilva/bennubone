@@ -1,0 +1,22 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th></th> <!-- imageURL -->
+            <th>Name</th>
+            <th>#</th>
+            <th>€</th>
+        </tr>
+    </thead>
+    <tbody>
+    {{#entries}}
+		<tr>
+			<td><img src='{{item.imageUrl}}'/></td>
+			<td>{{item.name}}</td>
+			<td>{{quantity}}</td>
+			<td>{{total}}</td>
+		</tr>
+	{{/entries}}
+    </tbody>
+</table>
+<p>Total : {{total}}</p>
+<p>Count : {{count}}</p>

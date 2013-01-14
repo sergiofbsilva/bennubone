@@ -17,6 +17,7 @@ public class CoffeeOrderEntrySerializer implements JsonSerializer<CoffeeOrderEnt
 	jsonObject.addProperty("id", coffeeOrderEntry.getExternalId());
 	jsonObject.addProperty("quantity", coffeeOrderEntry.getQuantity());
 	jsonObject.add("item", ctx.serialize(coffeeOrderEntry.getItem()));
+	jsonObject.addProperty("total", coffeeOrderEntry.getTotal().toString());
 	return jsonObject;
     }
 

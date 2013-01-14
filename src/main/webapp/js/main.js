@@ -3,10 +3,12 @@ var AppRouter = Backbone.Router.extend({
     routes: {
         ""                  : "showHome",
         "home"              : "showHome",
-		"order/list"        : "showOrders",
+		"orders/"           : "showOrders",
+		"orders/:id"        : "showOrder",
 		"user/list"         : "showUsers",
 		"order/create"      : "addOrder",
-		"item/list"			: "showItems" 
+		"item/list"			: "showItems",
+		"item/create"      : "addItem",
     },
 
     initialize: function () {
@@ -42,12 +44,22 @@ var AppRouter = Backbone.Router.extend({
         this.headerView.selectMenuItem('list-users-menu'); 
     },
     
+    showOrder: function(id) {
+    	var orderModel = new OrderModel({id : id});
+    	orderModel.fetch( { success : function() {
+    		var orderView = new OrderView( { model : orderModel });
+    		$('#content').html(orderView.el);
+    	}})
+    }, 
+    
     showOrders: function() {
-        if (!this.orderListView) {
-            this.orderListView = new OrderListView();
-        }
-        $('#content').html(this.orderListView.el);
-        this.headerView.selectMenuItem('list-orders-menu'); 
+    	var that = this;
+    	var orderCollection = new OrderCollection();
+    	orderCollection.fetch( { success : function() {
+    		orderListView = new OrderListView( { collection : orderCollection });
+    		$('#content').html(orderListView.el);
+            that.headerView.selectMenuItem('list-orders-menu');
+    	}})
     },
     
     showItems: function() {
@@ -56,11 +68,19 @@ var AppRouter = Backbone.Router.extend({
          }
          $('#content').html(this.itemListView.el);
          this.headerView.selectMenuItem('list-items-menu'); 
+    },
+    
+    addItem: function() {
+         $('#content').html(new CreateItemView().el);
+         this.headerView.selectMenuItem('createitem-menu');
     }
     
 });
 
+var app;
+
 utils.loadTemplate([], function() {
     app = new AppRouter();
     Backbone.history.start();
+    Backbone.emulateJSON = true;
 });

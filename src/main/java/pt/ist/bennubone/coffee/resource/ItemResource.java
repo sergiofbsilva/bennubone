@@ -73,7 +73,7 @@ public class ItemResource extends AbstractResource {
     @Produces(MediaType.APPLICATION_JSON)
     // { 'name' : 'Volluto', 'imageUrl' : 'http://www.google.pt/image.gif',
     // 'unitValue':'3.75', 'units' : '10' }
-    public Response addItem(@FormParam("data") String jsonData) {
+    public Response addItem(@FormParam("model") String jsonData) {
 	try {
 	    final CoffeeItem coffeeItem = createFromJson(jsonData, CoffeeItem.class);
 	    return Response.ok(loadJsonStringFor(coffeeItem)).build();

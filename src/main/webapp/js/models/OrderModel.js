@@ -1,5 +1,7 @@
 window.OrderModel = Backbone.Model.extend({
-
+	
+	urlRoot : 'api/orders' ,  
+	
     initialize: function () {
     },
 
