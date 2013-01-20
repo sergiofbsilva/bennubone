@@ -3,12 +3,13 @@ var AppRouter = Backbone.Router.extend({
     routes: {
         ""                  : "showHome",
         "home"              : "showHome",
-		"orders/"           : "showOrders",
+		"orders"            : "showOrders",
 		"orders/:id"        : "showOrder",
-		"user/list"         : "showUsers",
+		"users"         	: "showUsers",
 		"order/create"      : "addOrder",
-		"item/list"			: "showItems",
-		"item/create"      : "addItem",
+		"items"				: "showItems",
+		"item/create"		: "addItem",
+		"batches"			: "showBatches"
     },
 
     initialize: function () {
@@ -56,10 +57,21 @@ var AppRouter = Backbone.Router.extend({
     	var that = this;
     	var orderCollection = new OrderCollection();
     	orderCollection.fetch( { success : function() {
-    		orderListView = new OrderListView( { collection : orderCollection });
-    		$('#content').html(orderListView.el);
+    		$('#content').html(new OrderListView( { collection : orderCollection }).el);
             that.headerView.selectMenuItem('list-orders-menu');
-    	}})
+    	}});
+    },
+    
+    showBatches: function() {
+    	var that = this;
+    	var batchCollection = new BatchCollection();
+    	batchCollection.fetch( { success : function() {
+    		that.batchListView = new BatchListView( { collection : batchCollection });
+    		$('#content').html(that.batchListView.el);
+    		that.batchListView.parseTimestamps();
+    		
+            that.headerView.selectMenuItem('list-batches-menu');
+    	}});
     },
     
     showItems: function() {

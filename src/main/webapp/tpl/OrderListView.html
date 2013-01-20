@@ -1,40 +1,27 @@
 <ul class="nav nav-pills">
-  <li class="active">
-    <a id='show-all' href="#">All</a>
+  <li class="order-filter-pill active">
+    <a id="show-all" href="#orders">All</a>
   </li>
-  <li><a id='show-batched' href="#">Batched</a></li>
-  <li><a id='show-unbatched' href="#">Unbatched</a></li>
+  <li class="order-filter-pill"><a id="show-batched" href="#orders">Batched</a></li>
+  <li class="order-filter-pill"><a id="show-unbatched" href="#orders">Not Batched</a></li>
 </ul>
 <table class="table">
     <thead>
         <tr>
-            <th>#</th>
-            <th>€</th>
+            <th>Num Items</th>
+            <th>Total</th>
+            <th style="text-align: center">Status</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
     {{#orders}}
 		<tr>
-			<td>{{total}}</td>
-			<td>{{count}}</td>
-			<td><button id='{{id}}' class='btn btn-info btn-mini show-order'><i class='icon-zoom-in'></i> View Order</button></td>
+			<td>{{count}} unit(s)</td>
+			<td>{{total}} €</td>
+			<td style="text-align: center">{{#batched}}<span class="label label-warning">Batched</span>{{/batched}}{{^batched}}<span class="label label-important">Not Batched</span>{{/batched}}</td>
+			<td><button id='{{id}}' class='btn btn-info btn-mini show-order'>View Order</button></td>
 		</tr>
 	{{/orders}}
     </tbody>
 </table>
-
-<div class="span12">    
-    <form>
-      <fieldset>
-        <legend>Mandar vir Café</legend>
-        <label>Café</label>
-        <input type="text" placeholder="Nome do Café">
-        <span class="help-block">Nome do café a ser encomendado.</span>
-        <label class="checkbox">
-          <input type="checkbox"> Notificar-me por email quando o estado da encomenda mudar.
-        </label>
-        <button type="submit" class="btn">Encomendar</button>
-      </fieldset>
-    </form>
-</div>

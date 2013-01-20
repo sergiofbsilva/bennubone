@@ -3,8 +3,8 @@
         <tr>
             <th></th> <!-- imageURL -->
             <th>Name</th>
-            <th>#</th>
-            <th>€</th>
+            <th>Quantity</th>
+            <th>Amount</th>
         </tr>
     </thead>
     <tbody>
@@ -12,11 +12,11 @@
 		<tr>
 			<td><img src='{{item.imageUrl}}'/></td>
 			<td>{{item.name}}</td>
-			<td>{{quantity}}</td>
-			<td>{{total}}</td>
+			<td>{{quantity}} units</td>
+			<td>{{total}} €</td>
 		</tr>
 	{{/entries}}
     </tbody>
 </table>
-<p>Total : {{total}}</p>
-<p>Count : {{count}}</p>
+<p><b>Total Quantity:</b> {{count}} units</p>
+<p><b>Total Amount:</b> {{total}} €</p>

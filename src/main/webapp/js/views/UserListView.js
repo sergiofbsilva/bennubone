@@ -1,4 +1,4 @@
-window.UserListView = Backbone.View.extend({
+var UserListView = Backbone.View.extend({
 
     initialize: function () {
        this.render();

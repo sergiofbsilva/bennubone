@@ -1,4 +1,4 @@
-window.FooterView = Backbone.View.extend({
+var FooterView = Backbone.View.extend({
 
     initialize: function () {
         this.render();

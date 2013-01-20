@@ -1,4 +1,4 @@
-window.ItemListItemView = Backbone.View.extend({
+var ItemListItemView = Backbone.View.extend({
 
     tagName: "tr",
 

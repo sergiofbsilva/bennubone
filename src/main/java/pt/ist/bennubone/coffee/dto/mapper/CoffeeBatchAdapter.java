@@ -24,6 +24,7 @@ public class CoffeeBatchAdapter implements JsonSerializer<CoffeeBatch>, JsonDese
 	jsonObject.addProperty("id", coffeeBatch.getExternalId());
 	jsonObject.addProperty("shippingCharges", coffeeBatch.getShippingCharges());
 	jsonObject.addProperty("numCapsules", coffeeBatch.getTotalCount());
+	jsonObject.addProperty("sent", coffeeBatch.getSentTimestamp() != null);
 	jsonObject.add("creationTimestamp", ctx.serialize(coffeeBatch.getCreationTimestamp()));
 	jsonObject.add("sentTimestamp", ctx.serialize(coffeeBatch.getSentTimestamp()));
 	jsonObject.add("receivedTimestamp", ctx.serialize(coffeeBatch.getReceivedTimestamp()));

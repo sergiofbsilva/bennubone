@@ -1,4 +1,4 @@
-window.ItemListView = Backbone.View.extend({
+var ItemListView = Backbone.View.extend({
 
     initialize: function () {
        this.render();

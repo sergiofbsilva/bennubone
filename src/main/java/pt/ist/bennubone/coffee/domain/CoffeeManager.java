@@ -32,8 +32,10 @@ public class CoffeeManager extends CoffeeManager_Base {
     @Service
     public Boolean initDB() {
 	if (!hasAnyCoffeeItem()) {
-	    new CoffeeItem("Ristretto", "http://nesclub.nespresso.com/img/pictures/00746.gif", new BigDecimal("0.375"));
-	    new CoffeeItem("Arpeggio", "http://nesclub.nespresso.com/img/pictures/00673.gif", new BigDecimal("0.375"));
+	    CoffeeItem ristretto = new CoffeeItem("Ristretto", "http://nesclub.nespresso.com/img/pictures/00746.gif",
+		    new BigDecimal("0.375"));
+	    CoffeeItem arpeggio = new CoffeeItem("Arpeggio", "http://nesclub.nespresso.com/img/pictures/00673.gif",
+		    new BigDecimal("0.375"));
 	    new CoffeeItem("Roma", "http://nesclub.nespresso.com/img/pictures/00747.gif", new BigDecimal("0.375"));
 	    new CoffeeItem("Decaffeinato Intenso", "http://nesclub.nespresso.com/img/pictures/00707.gif", new BigDecimal("0.375"));
 	    new CoffeeItem("Livanto", "http://nesclub.nespresso.com/img/pictures/00712.gif", new BigDecimal("0.375"));
@@ -62,13 +64,17 @@ public class CoffeeManager extends CoffeeManager_Base {
 	    new CoffeeItem("Variations Cereja", "http://nesclub.nespresso.com/img/pictures/05836.jpg", new BigDecimal("0.42"));
 
 	    User david = new User("David Martinho", "davidmartinho@gmail.com", "pass");
-	    User sergio = new User("Sérgio Silva", "sergiofbsilva@gmail.com", "pass");
-	    User pedro = new User("Pedro Santos", "pedro.san7os@gmail.com", "pass");
+	    new User("Sérgio Silva", "sergiofbsilva@gmail.com", "pass");
+	    new User("Pedro Santos", "pedro.san7os@gmail.com", "pass");
 
-	    // CoffeeOrder davidOrder = new CoffeeOrder(david);
-	    // davidOrder.addEntry(ristretto, 2);
-	    // davidOrder.addEntry(arpeggio, 6);
-	    //
+	    CoffeeOrder davidOrder = new CoffeeOrder(david);
+	    davidOrder.addEntry(ristretto, 2);
+	    davidOrder.addEntry(arpeggio, 6);
+
+	    CoffeeOrder davidOrder2 = new CoffeeOrder(david);
+	    davidOrder2.addEntry(ristretto, 7);
+	    davidOrder2.addEntry(arpeggio, 10);
+
 	    // CoffeeOrder sergioOrder = new CoffeeOrder(sergio);
 	    // sergioOrder.addEntry(livanto, 5);
 	    // sergioOrder.addEntry(arpeggio, 4);
@@ -77,7 +83,7 @@ public class CoffeeManager extends CoffeeManager_Base {
 	    // pedroOrder.addEntry(livanto, 9);
 	    // pedroOrder.addEntry(roma, 3);
 
-	    // new CoffeeBatch(davidOrder, sergioOrder, pedroOrder);
+	    new CoffeeBatch(davidOrder);
 	    return true;
 	}
 	return false;

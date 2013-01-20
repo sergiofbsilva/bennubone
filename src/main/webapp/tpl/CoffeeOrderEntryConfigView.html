@@ -1,0 +1,11 @@
+<select name="coffee-item">
+	{{#items}}
+	<option value="{{id}}">
+		{{name}}
+	</option>
+	{{/items}}
+</select>
+
+<input name="quantity" type="text" placeholder="Quantity" />
+
+<button class="btn btn-danger remove-order-entry"><i class="icon-trash icon-white"></i> Remove Entry</button>

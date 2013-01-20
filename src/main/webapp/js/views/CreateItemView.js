@@ -1,4 +1,4 @@
-window.CreateItemView = Backbone.View.extend({
+var CreateItemView = Backbone.View.extend({
 
     initialize: function () {
         this.render();
