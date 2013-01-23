@@ -4,6 +4,11 @@
             <th>Name</th>
         </tr>
     </thead>
-    <tbody class="users">
+    <tbody>
+    	{{#users}}
+    	<tr>
+    		<td class="cenas">{{name}}</td>
+    	</tr>
+    	{{/users}}
     </tbody>
 </table>

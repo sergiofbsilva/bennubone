@@ -1,8 +1,8 @@
-window.ItemCollection = Backbone.Collection.extend({
-
-    model: ItemModel,
+CoffeeManager.Collection.CoffeeItemCollection = Backbone.Collection.extend({
 
     url: "api/items",
+
+    model: CoffeeManager.Model.CoffeeItemModel,
     
     parse: function(response){
         return response.items;

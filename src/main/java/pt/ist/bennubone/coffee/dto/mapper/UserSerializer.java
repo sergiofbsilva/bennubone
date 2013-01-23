@@ -11,12 +11,13 @@ import com.google.gson.JsonSerializer;
 
 public class UserSerializer implements JsonSerializer<User> {
 
-    @Override
-    public JsonElement serialize(User user, Type type, JsonSerializationContext ctx) {
-	JsonObject jsonObject = new JsonObject();
-	jsonObject.addProperty("id", user.getExternalId());
-	jsonObject.addProperty("name", user.getName());
-	jsonObject.addProperty("avatar", user.getAvatar());
-	return jsonObject;
-    }
+	@Override
+	public JsonElement serialize(User user, Type type, JsonSerializationContext ctx) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("id", user.getExternalId());
+		jsonObject.addProperty("name", user.getName());
+		jsonObject.addProperty("avatar", user.getAvatar());
+		jsonObject.add("roles", ctx.serialize(user.getRoleSet()));
+		return jsonObject;
+	}
 }

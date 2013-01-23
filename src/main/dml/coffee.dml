@@ -16,11 +16,15 @@ class User {
     String avatar;
 }
 
+class Role {
+	String name;
+}
+
 class CoffeeItem {
     String name ( REQUIRED );
     String imageUrl;
     int numUnits ( REQUIRED );
-    BigDecimal unitValue ( REQUIRED );
+    BigDecimal unitPrice ( REQUIRED );
     Boolean available;
 }
 
@@ -37,15 +41,29 @@ class CoffeeBatch {
 	BigDecimal shippingCharges;
 }
 
+relation UserPlaysRoles {
+	User playsRole user { multiplicity 0..*; }
+	Role playsRole role { multiplicity 0..*; }
+}
 
 relation CoffeeManagerHasUsers {
     CoffeeManager playsRole coffeeManager { multiplicity 1..1; }
     User playsRole user { multiplicity 0..*; }
 }
 
+relation CoffeeManagerHasRoles {
+	CoffeeManager playsRole coffeeManager { multiplicity 1..1; }
+    Role playsRole role { multiplicity 0..*; }
+}
+
 relation CoffeeManagerHasCoffeeItems {
-    CoffeeManager playsRole coffeeManager { multiplicity 1..1; }
+    CoffeeManager playsRole coffeeManager { multiplicity 0..1; }
     CoffeeItem playsRole coffeeItem { multiplicity 0..*; }
+}
+
+relation CoffeeItemHasPreviousVersions {
+	CoffeeItem playsRole previousVersion { multiplicity 0..1; }
+	CoffeeItem playsRole nextVersion { multiplicity 0..1; }
 }
 
 relation CoffeeManagerHasBatches {

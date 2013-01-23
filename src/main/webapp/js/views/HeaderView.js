@@ -1,14 +1,9 @@
-var HeaderView = Backbone.View.extend({
+CoffeeManager.View.HeaderView = Backbone.View.extend({
 
-    initialize: function () {
-        this.render();
-    },
+	el: $('#header'),
 
     render: function () {
-        var that = this;
-        utils.loadTemplate(['HeaderView'], function() {
-            that.$el.html(that.template());
-        });
+        CoffeeManager.Util.renderTemplate("HeaderView", this.el);
         return this;
     },
 

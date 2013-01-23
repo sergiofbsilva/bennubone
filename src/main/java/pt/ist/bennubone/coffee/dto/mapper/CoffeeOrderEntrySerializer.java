@@ -11,14 +11,13 @@ import com.google.gson.JsonSerializer;
 
 public class CoffeeOrderEntrySerializer implements JsonSerializer<CoffeeOrderEntry> {
 
-    @Override
-    public JsonElement serialize(CoffeeOrderEntry coffeeOrderEntry, Type type, JsonSerializationContext ctx) {
-	JsonObject jsonObject = new JsonObject();
-	jsonObject.addProperty("id", coffeeOrderEntry.getExternalId());
-	jsonObject.addProperty("quantity", coffeeOrderEntry.getQuantity());
-	jsonObject.add("item", ctx.serialize(coffeeOrderEntry.getItem()));
-	jsonObject.addProperty("total", coffeeOrderEntry.getTotal().toString());
-	return jsonObject;
-    }
-
+	@Override
+	public JsonElement serialize(CoffeeOrderEntry coffeeOrderEntry, Type type, JsonSerializationContext ctx) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("id", coffeeOrderEntry.getExternalId());
+		jsonObject.addProperty("quantity", coffeeOrderEntry.getQuantity());
+		jsonObject.add("item", ctx.serialize(coffeeOrderEntry.getItem()));
+		jsonObject.addProperty("total", coffeeOrderEntry.getTotal().setScale(2));
+		return jsonObject;
+	}
 }

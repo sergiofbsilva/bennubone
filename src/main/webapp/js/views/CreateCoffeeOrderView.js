@@ -1,29 +1,43 @@
-var CreateCoffeeOrderView = Backbone.View.extend({
+CoffeeManager.View.CreateCoffeeOrderView = Backbone.View.extend({
 
-    initialize: function () {
-        this.render();
-    },
-    
-    events : {
-    	"click #add-new-order-entry": "addNewOrderEntry"
-    
-    },
+	el : $('#content'),
 
-    render: function () {
-        var that = this;
-        this.itemCollection = new ItemCollection();
-        this.itemCollection.fetch({ success: function() {
-        	utils.loadTemplate(['CreateCoffeeOrderView'], function() {
-            	that.$el.html(that.template());
-            	that.id = 0;
-        	});
-        }});
-        return this;
-    },
-    
-    addNewOrderEntry: function() {
-    	this.id = this.id+1;
-    	$('#coffee-order-container').append(new CoffeeOrderEntryConfigView({ id: this.id, collection: this.itemCollection }).el);
-    }
-    
-});
+	render : function() {
+		CoffeeManager.Util.renderTemplate("CreateCoffeeOrderView", this.el, {
+			items : this.collection.toJSON()
+		});
+		return this;
+	},
+
+	events : {
+		"click #create-coffee-order" : "createCoffeeOrder"
+	},
+
+	createCoffeeOrder : function(event) {
+		event.preventDefault();
+		order = new Array();
+		$('input[name^=quantity]', this.el).filter(function(index, element) {
+			return $(element).val();
+		}).each(function(index, element) {
+			var id = $(element).attr("id");
+			var quantity = parseInt($(element).val());
+			order.push({
+				id : id,
+				quantity : quantity
+			});
+		});
+		var coffeeOrderModel = new CoffeeManager.Model.CoffeeOrderModel({
+			entries : order
+		});
+		coffeeOrderModel.save(null, {
+			success : function() {
+				CoffeeManager.Application.navigate("orders", true);
+			}
+		});
+		// $('input[name^=quantity]', this.el).each(function(index, element) {
+		// if($(element).val()) {
+		// console.log($(element).val() +" of "+ $(element).attr("id"));
+		// }
+		// });
+	}
+}); 

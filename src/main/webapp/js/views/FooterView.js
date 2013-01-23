@@ -1,15 +1,10 @@
-var FooterView = Backbone.View.extend({
-
-    initialize: function () {
-        this.render();
-    },
+CoffeeManager.View.FooterView = Backbone.View.extend({
+	
+	el: $('#footer'),
 
     render: function () {
-        var that = this;
-        utils.loadTemplate(['FooterView'], function() {
-            that.$el.html(that.template());
-        });
-        return this;
+        CoffeeManager.Util.renderTemplate("FooterView", this.el);
+		return this;	
     }
 
 });

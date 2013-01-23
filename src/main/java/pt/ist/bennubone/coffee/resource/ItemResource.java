@@ -26,69 +26,61 @@ import com.google.gson.JsonParser;
 @Path("/items")
 public class ItemResource extends AbstractResource {
 
-    @GET
-    @Path("/{oid}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getItem(@PathParam("oid") String oid) {
-	return Response.ok(loadJsonStringFromExternalId(oid)).build();
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllItems() {
-	return Response.ok(toJson("items", CoffeeManager.getInstance().getCoffeeItemSet())).build();
-    }
-
-    @PUT
-    @Path("/{oid}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response setItem(@PathParam("oid") String oid, @FormParam("data") String jsonData) {
-	final CoffeeItem item = readDomainObject(oid);
-	final JsonParser parser = new JsonParser();
-	final JsonObject obj = parser.parse(jsonData).getAsJsonObject();
-
-	final String name = obj.get("name") != null ? obj.get("name").getAsString() : null;
-
-	final String imageUrl = obj.get("imageUrl") != null ? obj.get("imageUrl").getAsString() : null;
-	final BigDecimal unitValue = obj.get("unitValue") != null ? obj.get("unitValue").getAsBigDecimal() : null;
-	setItem(item, name, imageUrl, unitValue);
-	return Response.ok(loadJsonStringFor(item)).build();
-    }
-
-    @Service
-    public void setItem(CoffeeItem item, final String name, final String imageUrl, final BigDecimal unitValue) {
-	if (imageUrl != null) {
-	    item.setImageUrl(imageUrl);
-	}
-	if (name != null) {
-	    item.setName(name);
+	@GET
+	@Path("/{oid}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getItem(@PathParam("oid") String oid) {
+		return Response.ok(loadJsonStringFromExternalId(oid)).build();
 	}
 
-	if (unitValue != null) {
-	    item.setUnitValue(unitValue);
-	}
-    }
-
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    // { 'name' : 'Volluto', 'imageUrl' : 'http://www.google.pt/image.gif',
-    // 'unitValue':'3.75', 'units' : '10' }
-    public Response addItem(@FormParam("model") String jsonData) {
-	try {
-	    final CoffeeItem coffeeItem = createFromJson(jsonData, CoffeeItem.class);
-	    return Response.ok(loadJsonStringFor(coffeeItem)).build();
-	} catch (DuplicateCoffeeItemException dcie) {
-	    throw new WebApplicationException(Response.status(Status.PRECONDITION_FAILED).entity(dcie).build());
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllItems() {
+		return Response.ok(toJson("items", CoffeeManager.getInstance().getCoffeeItemSet())).build();
 	}
 
-    }
+	@PUT
+	@Path("/{oid}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response setItem(@PathParam("oid") String oid, @FormParam("data") String jsonData) {
+		final CoffeeItem item = readDomainObject(oid);
+		final JsonParser parser = new JsonParser();
+		final JsonObject obj = parser.parse(jsonData).getAsJsonObject();
 
-    @DELETE
-    @Service
-    @Path("/{oid}")
-    public Response deleteItem(@PathParam("oid") String oid) {
-	CoffeeItem item = readDomainObject(oid);
-	item.delete();
-	return Response.ok().build();
-    }
+		final String name = obj.get("name") != null ? obj.get("name").getAsString() : null;
+		final BigDecimal unitPrice = obj.get("unitPrice") != null ? obj.get("unitPrice").getAsBigDecimal() : null;
+		final int numUnits = obj.get("numUnits") != null ? obj.get("numUnits").getAsInt() : null;
+		final String imageUrl = obj.get("imageUrl") != null ? obj.get("imageUrl").getAsString() : null;
+
+		updateItem(item, name, unitPrice, numUnits, imageUrl);
+		return Response.ok(loadJsonStringFor(item)).build();
+	}
+
+	@Service
+	public void updateItem(CoffeeItem item, final String name, final BigDecimal unitPrice, int numUnits, final String imageUrl) {
+		item.update(name, unitPrice, numUnits, imageUrl);
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	// { 'name' : 'Volluto', 'imageUrl' : 'http://www.google.pt/image.gif',
+	// 'unitPrice':'3.75', 'numUnits' : '10' }
+	public Response addItem(@FormParam("model") String jsonData) {
+		try {
+			final CoffeeItem coffeeItem = createFromJson(jsonData, CoffeeItem.class);
+			return Response.ok(loadJsonStringFor(coffeeItem)).build();
+		} catch (DuplicateCoffeeItemException dcie) {
+			throw new WebApplicationException(Response.status(Status.PRECONDITION_FAILED).entity(dcie).build());
+		}
+
+	}
+
+	@DELETE
+	@Service
+	@Path("/{oid}")
+	public Response deleteItem(@PathParam("oid") String oid) {
+		CoffeeItem item = readDomainObject(oid);
+		item.delete();
+		return Response.ok().build();
+	}
 }

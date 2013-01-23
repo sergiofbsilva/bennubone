@@ -1,12 +1,5 @@
-window.UserModel = Backbone.Model.extend({
+CoffeeManager.Model.UserModel = Backbone.Model.extend({
 
-    initialize: function () {
-    },
+	urlRoot: 'api/users'
 
-    defaults: {
-        id: null,
-        firstName: "John",
-        lastName: "Doe",
-        username: "johndoe"
-    }
 });

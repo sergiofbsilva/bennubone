@@ -1,98 +1,111 @@
-var AppRouter = Backbone.Router.extend({
+CoffeeManager.Router.Main = Backbone.Router.extend({
 
     routes: {
         ""                  : "showHome",
         "home"              : "showHome",
-		"orders"            : "showOrders",
-		"orders/:id"        : "showOrder",
+		"orders"            : "showCoffeeOrders",
+		"orders/:id"        : "showCoffeeOrder",
+		"orders/edit/:id"   : "editCoffeeOrder",
+		"order/create"      : "createCoffeeOrder",
 		"users"         	: "showUsers",
-		"order/create"      : "addOrder",
-		"items"				: "showItems",
-		"item/create"		: "addItem",
-		"batches"			: "showBatches"
+		"items"				: "showCoffeeItems",
+		"items/create"		: "createCoffeeItem",
+		"batches"			: "showCoffeeBatches",
+		"batches/:id"		: "showCoffeeBatch"
     },
 
     initialize: function () {
-        if(!this.headerView) {
-            this.headerView = new HeaderView();
-        }
-        if(!this.footerView) {
-            this.footerView = new FooterView();
-        }
-        $('#header').html(this.headerView.el);
-        $('#footer').html(this.footerView.el);
+    	var headerView = CoffeeManager.Util.getHeaderView();
+    	headerView.render();
+    	var footerView = CoffeeManager.Util.getFooterView();
+    	footerView.render();
     },
     
     showHome: function() {
-        if (!this.homeView) {
-            this.homeView = new HomeView();
-        }
-        $('#content').html(this.homeView.el);
-        this.headerView.selectMenuItem('home-menu');
+        var homeView = new CoffeeManager.View.HomeView();
+        homeView.render();
+        //this.headerView.selectMenuItem('home-menu');
     },
     
-    addOrder: function() {
-        if (!this.createCoffeeOrderView) {
-            this.createCoffeeOrderView = new CreateCoffeeOrderView();
-        }
-        $('#content').html(this.createCoffeeOrderView.el);
-        this.headerView.selectMenuItem('createorder-menu');
+    createCoffeeOrder: function() {
+		var itemCollection = new CoffeeManager.Collection.CoffeeItemCollection();
+		itemCollection.fetch({ success : function() {
+			var createCoffeeOrderView = new CoffeeManager.View.CreateCoffeeOrderView({ collection: itemCollection });
+			createCoffeeOrderView.render();
+		}}); 
     },
 
     showUsers: function() {
-        var userListView = new UserListView();
-        $('#content').html(userListView.el);
-        this.headerView.selectMenuItem('list-users-menu'); 
+    	var userCollection = new CoffeeManager.Collection.UserCollection();
+    	userCollection.fetch({ success : function() {
+	        var userListView = new CoffeeManager.View.UserListView({ collection: userCollection });
+    	    userListView.render();	
+    	}});
     },
     
-    showOrder: function(id) {
-    	var orderModel = new OrderModel({id : id});
-    	orderModel.fetch( { success : function() {
-    		var orderView = new OrderView( { model : orderModel });
-    		$('#content').html(orderView.el);
-    	}})
+    showUser: function(id) {
+    	var userModel = new CoffeeManager.Model.UserModel({id : id});
+    	userModel.fetch({ success : function() {
+    		var userView = new CoffeeManager.View.UserView({ model : userModel });
+			userView.render();
+    	}});
+    },
+    
+    showCoffeeOrder: function(id) {
+    	var coffeOrderModel = new CoffeeManager.Model.CoffeeOrderModel({id : id});
+    	coffeOrderModel.fetch({ success : function() {
+    		var coffeeOrderView = new CoffeeManager.View.CoffeeOrderView({ model : coffeOrderModel });
+			coffeeOrderView.render();
+    	}});
     }, 
     
-    showOrders: function() {
-    	var that = this;
-    	var orderCollection = new OrderCollection();
+    editCoffeeOrder: function(id) {
+    	var itemCollection = new CoffeeManager.Collection.CoffeeItemCollection();
+		itemCollection.fetch({ success : function() {
+			var editCoffeeOrderView = new CoffeeManager.View.EditCoffeeOrderView({ id: id, collection: itemCollection });
+			editCoffeeOrderView.render();
+		}}); 
+    },
+    
+    showCoffeeOrders: function() {
+    	var orderCollection = new CoffeeManager.Collection.CoffeeOrderCollection();
     	orderCollection.fetch( { success : function() {
-    		$('#content').html(new OrderListView( { collection : orderCollection }).el);
-            that.headerView.selectMenuItem('list-orders-menu');
+    		var orderListView = new CoffeeManager.View.CoffeeOrderListView({ collection : orderCollection });
+			orderListView.render();
     	}});
     },
     
-    showBatches: function() {
-    	var that = this;
-    	var batchCollection = new BatchCollection();
-    	batchCollection.fetch( { success : function() {
-    		that.batchListView = new BatchListView( { collection : batchCollection });
-    		$('#content').html(that.batchListView.el);
-    		that.batchListView.parseTimestamps();
-    		
-            that.headerView.selectMenuItem('list-batches-menu');
+   	showCoffeeBatch: function(id) {
+    	var batchModel = new CoffeeManager.Model.CoffeeBatchModel({id : id});
+    	batchModel.fetch({ success : function() {
+    		var batchView = new CoffeeManager.View.CoffeeBatchView({ model : batchModel });
+			batchView.render();
+    	}});
+    }, 
+    
+    showCoffeeBatches: function() {
+    	var batchCollection = new CoffeeManager.Collection.CoffeeBatchCollection();
+    	batchCollection.fetch({ success : function() {
+    		var batchListView = new CoffeeManager.View.CoffeeBatchListView({ collection : batchCollection });
+    		batchListView.render();
     	}});
     },
     
-    showItems: function() {
-    	 if (!this.itemListView) {
-             this.itemListView = new ItemListView();
-         }
-         $('#content').html(this.itemListView.el);
-         this.headerView.selectMenuItem('list-items-menu'); 
+    showCoffeeItems: function() {
+		var itemCollection = new CoffeeManager.Collection.CoffeeItemCollection();
+		itemCollection.fetch({ success : function() {
+			var itemListView = new CoffeeManager.View.CoffeeItemListView({ collection: itemCollection });
+			itemListView.render();
+		}}); 
     },
     
-    addItem: function() {
-         $('#content').html(new CreateItemView().el);
-         this.headerView.selectMenuItem('createitem-menu');
+    createCoffeeItem: function() {
+    	var createItemView = CoffeeManager.View.CreateCoffeeItemView();
+    	createItemView.render();
     }
     
 });
 
-var app;
-
-utils.loadTemplate([], function() {
-    app = new AppRouter();
-    Backbone.history.start();
-    Backbone.emulateJSON = true;
-});
+CoffeeManager.Application = new CoffeeManager.Router.Main();
+Backbone.history.start();
+Backbone.emulateJSON = true;

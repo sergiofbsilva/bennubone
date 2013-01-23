@@ -1,14 +1,9 @@
-var HomeView = Backbone.View.extend({
+CoffeeManager.View.HomeView = Backbone.View.extend({
 
-    initialize: function () {
-        this.render();
-    },
+    el: $('#content'),
 
     render: function () {
-        var that = this;
-        utils.loadTemplate(['HomeView'], function() {
-            that.$el.html(that.template());
-        });
+        CoffeeManager.Util.renderTemplate("HomeView", this.el);
         return this;
     }
 });

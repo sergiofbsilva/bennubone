@@ -1,10 +1,10 @@
-window.BatchCollection = Backbone.Collection.extend({
-
-    model: BatchModel,
+CoffeeManager.Collection.CoffeeBatchCollection = Backbone.Collection.extend({
 
     url: "api/batches",
+
+    model: CoffeeManager.Model.CoffeeBatchModel,
     
-    parse: function(response){
+    parse: function(response) {
         return response.batches;
     },
      

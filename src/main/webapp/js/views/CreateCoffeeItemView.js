@@ -1,18 +1,13 @@
-var CreateItemView = Backbone.View.extend({
-
-    initialize: function () {
-        this.render();
-    },
-    
+CoffeeManager.View.CreateCoffeeItemView = Backbone.View.extend({
+	
+	el: $('#content'),
+	
     events : {
     	"click #create-item" : "createItem"
     }, 
 
     render: function () {
-        var that = this;
-        utils.loadTemplate(['CreateItemView'], function() {
-            that.$el.html(that.template());
-        });
+        CoffeeManager.Util.renderTemplate("CreateItemView", this.el);
         return this;
     }, 
     
