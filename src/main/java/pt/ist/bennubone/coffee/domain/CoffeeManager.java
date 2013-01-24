@@ -2,18 +2,32 @@ package pt.ist.bennubone.coffee.domain;
 
 import java.math.BigDecimal;
 
-import pt.ist.bennubone.coffee.util.CoffeeManagerUtils;
-import pt.ist.fenixWebFramework.services.Service;
-import pt.ist.fenixframework.FenixFramework;
+import javax.servlet.http.HttpSession;
+
+import pt.ist.bennu.core.domain.Bennu;
+import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.domain.groups.DynamicGroup;
+import pt.ist.bennu.core.domain.groups.NobodyGroup;
+import pt.ist.bennu.core.security.Authenticate;
+import pt.ist.bennu.service.Service;
 
 public class CoffeeManager extends CoffeeManager_Base {
 
 	public CoffeeManager() {
-		super();
+		setBennu(Bennu.getInstance());
+		setManagerGroup(new DynamicGroup("COFFEE_MANAGER", NobodyGroup.getInstance()));
+	}
+
+	@Service
+	private static void createCoffeeManager() {
+		new CoffeeManager();
 	}
 
 	public static CoffeeManager getInstance() {
-		return FenixFramework.getRoot();
+		if (!Bennu.getInstance().hasCoffeeManager()) {
+			createCoffeeManager();
+		}
+		return Bennu.getInstance().getCoffeeManager();
 	}
 
 	public CoffeeItem getCoffeeItem(final String name) {
@@ -64,20 +78,10 @@ public class CoffeeManager extends CoffeeManager_Base {
 					"http://nesclub.nespresso.com/img/pictures/06621.jpg");
 			new CoffeeItem("Variations Cereja", new BigDecimal("0.42"), "http://nesclub.nespresso.com/img/pictures/05836.jpg");
 
-			Role administratorRole = new Role("Administrator");
-			Role coffeeConsumerRole = new Role("Coffee Consumer");
-			Role coffeeBatchManager = new Role("Coffee Batch Manager");
-
-			User david = new User("David Martinho", "davidmartinho@gmail.com", "pass");
-			david.addRole(coffeeConsumerRole);
-			david.addRole(administratorRole);
-			User sergio = new User("Sérgio Silva", "sergiofbsilva@gmail.com", "pass");
-			sergio.addRole(coffeeConsumerRole);
-			User pedro = new User("Pedro Santos", "pedro.san7os@gmail.com", "pass");
-			pedro.addRole(coffeeConsumerRole);
-			User susana = new User("Susana Fernandes", "susanal@gmail.com", "pass");
-			susana.addRole(coffeeConsumerRole);
-			susana.addRole(coffeeBatchManager);
+			User david = new User("ist55371");
+			User sergio = new User("ist152416");
+			User pedro = new User("ist148357");
+			User susana = new User("ist2506");
 
 			// CoffeeOrder davidOrder0 = new CoffeeOrder(david);
 			// davidOrder0.addEntry(ristretto, 5);
@@ -113,17 +117,7 @@ public class CoffeeManager extends CoffeeManager_Base {
 		return false;
 	}
 
-	public User login(String email, String password) {
-		for (User user : getUserSet()) {
-			if (user.getEmail().equals(email)) {
-				String passwordHash = CoffeeManagerUtils.calculatePasswordHash(password, user.getSalt());
-				if (passwordHash.equals(user.getPasswordHash())) {
-					return user;
-				} else {
-					return null;
-				}
-			}
-		}
-		return null;
+	public User login(HttpSession session, String username) {
+		return Authenticate.login(session, username, null, false);
 	}
 }

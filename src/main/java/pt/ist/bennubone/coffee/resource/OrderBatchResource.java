@@ -11,10 +11,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import pt.ist.bennu.service.Service;
 import pt.ist.bennubone.coffee.domain.CoffeeBatch;
 import pt.ist.bennubone.coffee.domain.CoffeeManager;
 import pt.ist.bennubone.coffee.domain.CoffeeOrder;
-import pt.ist.fenixWebFramework.services.Service;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

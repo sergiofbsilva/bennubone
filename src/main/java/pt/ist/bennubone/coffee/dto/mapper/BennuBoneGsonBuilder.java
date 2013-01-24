@@ -2,12 +2,11 @@ package pt.ist.bennubone.coffee.dto.mapper;
 
 import org.joda.time.DateTime;
 
+import pt.ist.bennu.core.domain.User;
 import pt.ist.bennubone.coffee.domain.CoffeeBatch;
 import pt.ist.bennubone.coffee.domain.CoffeeItem;
 import pt.ist.bennubone.coffee.domain.CoffeeOrder;
 import pt.ist.bennubone.coffee.domain.CoffeeOrderEntry;
-import pt.ist.bennubone.coffee.domain.Role;
-import pt.ist.bennubone.coffee.domain.User;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,7 +22,6 @@ public class BennuBoneGsonBuilder {
 		builder.serializeNulls();
 		builder.setPrettyPrinting();
 		builder.registerTypeAdapter(User.class, new UserSerializer());
-		builder.registerTypeAdapter(Role.class, new RoleAdapter());
 		builder.registerTypeAdapter(CoffeeOrder.class, new CoffeeOrderAdapter());
 		builder.registerTypeAdapter(CoffeeItem.class, new CoffeeItemAdapter());
 		builder.registerTypeAdapter(CoffeeBatch.class, new CoffeeBatchAdapter());

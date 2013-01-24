@@ -3,8 +3,8 @@ package pt.ist.bennubone.coffee.dto.mapper;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 
+import pt.ist.bennu.service.Service;
 import pt.ist.bennubone.coffee.domain.CoffeeItem;
-import pt.ist.fenixWebFramework.services.Service;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

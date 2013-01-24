@@ -2,7 +2,7 @@ package pt.ist.bennubone.coffee.domain;
 
 import java.math.BigDecimal;
 
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.bennu.service.Service;
 import pt.ist.fenixframework.FFDomainException;
 
 public class CoffeeItem extends CoffeeItem_Base {

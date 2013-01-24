@@ -2,9 +2,9 @@ package pt.ist.bennubone.coffee.dto.mapper;
 
 import java.lang.reflect.Type;
 
+import pt.ist.bennu.service.Service;
 import pt.ist.bennubone.coffee.domain.CoffeeBatch;
 import pt.ist.bennubone.coffee.domain.CoffeeOrder;
-import pt.ist.fenixWebFramework.services.Service;
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
 
 import com.google.gson.JsonArray;

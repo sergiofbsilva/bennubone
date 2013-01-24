@@ -2,7 +2,8 @@ package pt.ist.bennubone.coffee.domain;
 
 import java.math.BigDecimal;
 
-import pt.ist.fenixWebFramework.services.Service;
+import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.service.Service;
 
 public class CoffeeOrder extends CoffeeOrder_Base {
 

@@ -15,10 +15,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import pt.ist.bennu.service.Service;
 import pt.ist.bennubone.coffee.domain.CoffeeItem;
 import pt.ist.bennubone.coffee.domain.CoffeeItem.DuplicateCoffeeItemException;
 import pt.ist.bennubone.coffee.domain.CoffeeManager;
-import pt.ist.fenixWebFramework.services.Service;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
