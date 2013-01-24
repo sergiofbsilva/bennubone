@@ -1,10 +1,14 @@
 package pt.ist.bennubone.coffee.resource;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
 import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.security.Authenticate;
 import pt.ist.bennu.core.security.UserView;
+import pt.ist.bennu.core.util.ConfigurationManager;
+import pt.ist.bennu.core.util.ConfigurationManager.CasConfig;
 import pt.ist.bennubone.coffee.domain.CoffeeManager;
 import pt.ist.bennubone.coffee.dto.mapper.BennuBoneGsonBuilder;
 import pt.ist.bennubone.coffee.exception.BennuBoneException;
@@ -24,7 +28,31 @@ public abstract class AbstractResource {
 	}
 
 	@Context
+	private HttpServletRequest request;
+
+	@Context
 	private SecurityContext securityContext;
+
+	protected User login(String username, String password, boolean checkPassword) {
+		return Authenticate.login(request.getSession(false), username, password, checkPassword);
+	}
+
+	protected CasConfig getCasConfig() {
+		if (request != null) {
+			return ConfigurationManager.getCasConfig(request.getServerName());
+		} else {
+			return null;
+		}
+	}
+
+	protected boolean isCasEnabled() {
+		CasConfig casConfig = getCasConfig();
+		if (casConfig != null) {
+			return casConfig.isCasEnabled();
+		} else {
+			return false;
+		}
+	}
 
 	protected <T extends DomainObject> T readDomainObject(final String externalId) {
 		boolean error = false;

@@ -3,11 +3,6 @@ package pt.ist.bennubone.coffee.dto.mapper;
 import java.lang.reflect.Type;
 
 import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.groups.DynamicGroup;
-import pt.ist.bennu.core.domain.groups.GroupException;
-import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.bennubone.coffee.exception.BennuBoneException;
-import pt.ist.bennubone.coffee.exception.CoffeeManagerError;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -21,14 +16,9 @@ public class UserSerializer implements JsonSerializer<User> {
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("id", user.getExternalId());
 		jsonObject.addProperty("name", user.getPresentationName());
-		PersistentGroup coffeeUsersGroup;
-		try {
-			coffeeUsersGroup = DynamicGroup.getInstance("COFFEE_MANAGERS");
-			jsonObject.add("isCoffeeManager", ctx.serialize(coffeeUsersGroup.isMember(user)));
+		jsonObject.addProperty("isCoffeeManager", true);
+		// TODO: FIX THIS SHIT
 
-		} catch (GroupException e) {
-			throw new BennuBoneException(CoffeeManagerError.COFFEE_USERS_GROUP_NOT_FOUND);
-		}
 		return jsonObject;
 	}
 }
