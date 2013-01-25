@@ -6,6 +6,10 @@ valueType java.math.BigDecimal as BigDecimal {
     }
 }
 
+class Person {
+	String name;
+}
+
 class CoffeeManager;
 
 class CoffeeItem {
@@ -27,6 +31,11 @@ class CoffeeBatch {
 	DateTime sentTimestamp;
 	DateTime receivedTimestamp;
 	BigDecimal shippingCharges;
+}
+
+relation UserHavePersons {
+	.pt.ist.bennu.core.domain.User playsRole user { multiplicity 1..1; }
+	Person playsRole person { multiplicity 0..1; }
 }
 
 relation BennuCoffeeManager {

@@ -2,7 +2,6 @@ package pt.ist.bennubone.coffee.resource;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.SecurityContext;
 
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.security.Authenticate;
@@ -28,10 +27,7 @@ public abstract class AbstractResource {
 	}
 
 	@Context
-	private HttpServletRequest request;
-
-	@Context
-	private SecurityContext securityContext;
+	HttpServletRequest request;
 
 	protected User login(String username, String password, boolean checkPassword) {
 		return Authenticate.login(request.getSession(false), username, password, checkPassword);

@@ -7,8 +7,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.security.UserView;
@@ -30,14 +32,14 @@ public class LoginResource extends AbstractResource {
 
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response login(@FormParam("username") String username, @FormParam("password") String password)
+	public Response login(@Context UriInfo uriInfo, @FormParam("username") String username, @FormParam("password") String password)
 			throws URISyntaxException {
-		if (isCasEnabled()) {
+		if (!isCasEnabled()) {
 			User authenticatedUser = login(username, password, false);
 			if (authenticatedUser == null) {
 				throw new BennuBoneException(CoffeeManagerError.UNAUTHORIZED);
 			} else {
-				return Response.ok().build();
+				return Response.seeOther(uriInfo.getBaseUriBuilder().replacePath("").build()).build();
 			}
 		} else {
 			throw new BennuBoneException(CoffeeManagerError.UNAUTHORIZED);
