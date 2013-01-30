@@ -9,12 +9,12 @@ import pt.ist.bennubone.coffee.domain.CoffeeManager;
 @Path("/initDB")
 public class InitBD {
 
-    @GET
-    public Response doIt() {
-	if (CoffeeManager.getInstance().initDB()) {
-	    return Response.ok("DB init sucessfully.").build();
-	} else {
-	    return Response.ok("DB already initialized.").build();
+	@GET
+	public Response doIt() {
+		if (CoffeeManager.getInstance().initDB()) {
+			return Response.ok("DB init sucessfully.").build();
+		} else {
+			return Response.ok("DB already initialized.").build();
+		}
 	}
-    }
 }

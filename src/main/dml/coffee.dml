@@ -8,6 +8,7 @@ valueType java.math.BigDecimal as BigDecimal {
 
 class Person {
 	String name;
+	String email;
 }
 
 class CoffeeManager;

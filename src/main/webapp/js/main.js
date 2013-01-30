@@ -1,9 +1,8 @@
 CoffeeManager.Router.Main = Backbone.Router.extend({
 
-	isAuthenticated : false,
-
 	routes : {
-		"" : "showHome",
+		"" : "verifyLogin",
+		"login" : "showLogin",
 		"home" : "showHome",
 		"orders" : "showCoffeeOrders",
 		"orders/:id" : "showCoffeeOrder",
@@ -13,50 +12,42 @@ CoffeeManager.Router.Main = Backbone.Router.extend({
 		"items" : "showCoffeeItems",
 		"items/create" : "createCoffeeItem",
 		"batches" : "showCoffeeBatches",
-		"login" : "showLogin",
 		"batches/:id" : "showCoffeeBatch"
 	},
-
-	showLogin : function() {
-		if (this.isAuthenticated) {
-			this.showHome();
-		} else {
-			var that = this;
-			var settingsModel = new CoffeeManager.Model.ApplicationSettingsModel();
-			settingsModel.fetch({
-				success : function() {
+	
+	showLogin : function () {
+		var that = this;
+		var settingsModel = new CoffeeManager.Model.ApplicationSettingsModel();
+		settingsModel.fetch({
+			success : function() {
 					if (settingsModel.get("casEnabled"))
 						window.location.href = settingsModel.get("loginUrl");
 					else
 						CoffeeManager.Util.renderTemplate("LoginView", $("body"));
 				}
 			});
-		}
-
+	},
+	
+	verifyLogin : function() {
+		var loginModel = new CoffeeManager.Model.LoginModel();
+		var that = this;
+		loginModel.fetch({
+			success : function() {
+				that.showHome(loginModel);
+			}
+		});
 	},
 
 	initialize : function() {
 	},
 
-	showHome : function() {
-		if (this.isAuthenticated) {
-			var headerView = CoffeeManager.Util.getHeaderView();
+	showHome : function(loginModel) {
+			var headerView = new CoffeeManager.View.HeaderView({ model : loginModel });
 			headerView.render();
 			var footerView = CoffeeManager.Util.getFooterView();
 			footerView.render();
 			var homeView = new CoffeeManager.View.HomeView();
 			homeView.render();
-		} else {
-			var loginModel = new CoffeeManager.Model.LoginModel();
-			var that = this;
-			loginModel.fetch({
-				success : function() {
-					that.isAuthenticated = true;
-					that.showHome();
-				}
-			});
-		}
-		//this.headerView.selectMenuItem('home-menu');
 	},
 
 	createCoffeeOrder : function() {

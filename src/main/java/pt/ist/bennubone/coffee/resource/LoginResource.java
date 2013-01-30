@@ -12,6 +12,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pt.ist.bennu.core.domain.User;
 import pt.ist.bennu.core.security.UserView;
 import pt.ist.bennubone.coffee.exception.BennuBoneException;
@@ -19,6 +22,7 @@ import pt.ist.bennubone.coffee.exception.CoffeeManagerError;
 
 @Path("/login")
 public class LoginResource extends AbstractResource {
+	Logger logger = LoggerFactory.getLogger(LoginResource.class);
 
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })

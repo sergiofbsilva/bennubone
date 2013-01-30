@@ -78,40 +78,6 @@ public class CoffeeManager extends CoffeeManager_Base {
 					"http://nesclub.nespresso.com/img/pictures/06621.jpg");
 			new CoffeeItem("Variations Cereja", new BigDecimal("0.42"), "http://nesclub.nespresso.com/img/pictures/05836.jpg");
 
-			User david = new User("ist55371");
-			User sergio = new User("ist152416");
-			User pedro = new User("ist148357");
-			User susana = new User("ist2506");
-
-			// CoffeeOrder davidOrder0 = new CoffeeOrder(david);
-			// davidOrder0.addEntry(ristretto, 5);
-			// davidOrder0.addEntry(livanto, 15);
-			//
-			// CoffeeOrder davidOrder = new CoffeeOrder(david);
-			// davidOrder.addEntry(ristretto, 2);
-			// davidOrder.addEntry(arpeggio, 6);
-			//
-			// CoffeeOrder davidOrder2 = new CoffeeOrder(david);
-			// davidOrder2.addEntry(ristretto, 7);
-			// davidOrder2.addEntry(arpeggio, 10);
-			//
-			// CoffeeOrder sergioOrder = new CoffeeOrder(sergio);
-			// sergioOrder.addEntry(livanto, 5);
-			// sergioOrder.addEntry(arpeggio, 4);
-			//
-			// CoffeeOrder pedroOrder = new CoffeeOrder(pedro);
-			// pedroOrder.addEntry(livanto, 9);
-			// pedroOrder.addEntry(roma, 3);
-			//
-			// new CoffeeBatch(davidOrder0);
-			//
-			// CoffeeBatch batch1 = new CoffeeBatch(davidOrder);
-			// batch1.send();
-			//
-			// CoffeeBatch batch2 = new CoffeeBatch(davidOrder2, sergioOrder, pedroOrder);
-			// batch2.send();
-			// batch2.receive();
-
 			return true;
 		}
 		return false;

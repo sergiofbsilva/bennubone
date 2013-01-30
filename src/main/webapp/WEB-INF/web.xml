@@ -21,7 +21,9 @@
     <ordering>
 		<after>
 			<!-- [START OF BENNU GENERATED FRAGMENT] -->
-			<!-- [END OF BENNU GENERATED FRAGMENT] -->
+   <name>bennu-core</name>
+   <name>bennu-service</name>
+   <!-- [END OF BENNU GENERATED FRAGMENT] -->
 		</after>
 		<before>
 			<others />

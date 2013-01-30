@@ -2,16 +2,33 @@ package pt.ist.bennubone.coffee.dto.mapper;
 
 import java.lang.reflect.Type;
 
+import javax.ws.rs.core.MediaType;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import pt.ist.bennu.core.domain.User;
+import pt.ist.bennu.core.util.ConfigurationManager;
 import pt.ist.bennu.service.Service;
 import pt.ist.bennubone.coffee.domain.Person;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 
 public class UserSerializer implements JsonSerializer<User> {
+	private static Logger logger = LoggerFactory.getLogger(UserSerializer.class);
+
+	private static final String url = ConfigurationManager.getProperty("fenixdata.url");
+	private static final String username = ConfigurationManager.getProperty("fenixdata.user");
+	private static final String password = ConfigurationManager.getProperty("fenixdata.pass");
+	private static final Client client = Client.create();
+	private static final JsonParser parser = new JsonParser();
 
 	@Override
 	public JsonElement serialize(User user, Type type, JsonSerializationContext ctx) {
@@ -21,7 +38,8 @@ public class UserSerializer implements JsonSerializer<User> {
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("id", user.getExternalId());
 		jsonObject.addProperty("name", user.getPerson().getName());
-		jsonObject.addProperty("avatar", user.getPerson().getAvatar());
+		jsonObject.addProperty("email", user.getPerson().getEmail());
+		jsonObject.addProperty("avatarUrl", user.getPerson().getAvatar());
 		jsonObject.addProperty("isCoffeeManager", true);
 
 		return jsonObject;
@@ -29,7 +47,19 @@ public class UserSerializer implements JsonSerializer<User> {
 
 	@Service
 	public void populateUserPerson(User user) {
-		user.setPerson(new Person("David Martinho"));
-		user.setEmail("davidmartinho@gmail.com");
+		final String fenixdataUrl = url + user.getUsername();
+		final WebResource webResource = client.resource(fenixdataUrl + "&username=" + username + "&password=" + password);
+		final ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
+
+		if (response.getStatus() != 200) {
+			logger.warn("Status {} : Couldn't connect to {}", response.getStatus(), webResource.getURI());
+		} else {
+			final JsonElement jsonObject = parser.parse(response.getEntity(String.class));
+			final JsonObject asJsonObject = jsonObject.getAsJsonObject();
+			String name = asJsonObject.get("nickname").getAsString();
+			final JsonElement emailJsonElement = asJsonObject.get("email");
+			String email = emailJsonElement == null ? user.getUsername() + "@ist.utl.pt" : emailJsonElement.getAsString();
+			Person.newInstance(name, email, user);
+		}
 	}
 }

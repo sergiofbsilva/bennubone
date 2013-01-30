@@ -17,7 +17,7 @@ public class ApplicationSettingsResource extends AbstractResource {
 		JsonObject jsonObject = new JsonObject();
 		if (isCasEnabled()) {
 			jsonObject.addProperty("casEnabled", true);
-			jsonObject.addProperty("loginUrl", getCasConfig().getCasLoginUrl());
+			jsonObject.addProperty("loginUrl", getCasConfig().getCasLoginUrl(request));
 			jsonObject.addProperty("logoutUrl", getCasConfig().getCasLogoutUrl());
 		} else {
 			jsonObject.addProperty("casEnabled", false);

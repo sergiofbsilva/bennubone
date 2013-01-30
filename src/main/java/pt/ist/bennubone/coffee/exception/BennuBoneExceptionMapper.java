@@ -10,13 +10,13 @@ import com.google.gson.JsonObject;
 @Provider
 public class BennuBoneExceptionMapper implements ExceptionMapper<BennuBoneException> {
 
-    @Override
-    public Response toResponse(BennuBoneException exception) {
-	JsonObject jsonObject = new JsonObject();
-	jsonObject.addProperty("internalErrorCode", exception.getInternalErrorCode());
-	jsonObject.addProperty("message", exception.getMessage());
-	return Response.status(exception.getResponseStatus()).entity(jsonObject.toString()).type(MediaType.APPLICATION_JSON)
-		.build();
-    }
+	@Override
+	public Response toResponse(BennuBoneException exception) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("internalErrorCode", exception.getInternalErrorCode());
+		jsonObject.addProperty("message", exception.getMessage());
+		return Response.status(exception.getResponseStatus()).entity(jsonObject.toString()).type(MediaType.APPLICATION_JSON)
+				.build();
+	}
 
 }

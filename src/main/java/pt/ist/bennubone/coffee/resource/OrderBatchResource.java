@@ -24,63 +24,63 @@ import com.google.gson.JsonParser;
 @Path("/batches")
 public class OrderBatchResource extends AbstractResource {
 
-    @GET
-    @Path("/{oid}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getOrderBatch(@PathParam("oid") String externalId) {
-	String responseString = loadJsonStringFromExternalId(externalId);
-	return Response.ok(responseString).build();
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllBatches() {
-	return Response.ok(toJson("batches", CoffeeManager.getInstance().getBatch())).build();
-    }
-
-    // {orders : [oid1,oid2,...,oidN] }
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response newBatch(@FormParam("data") String data) {
-	return Response.ok(createFromJson(data, CoffeeBatch.class)).build();
-    }
-
-    @PUT
-    @Path("/{oid}")
-    public Response editBatch(@PathParam("oid") String externalId, @FormParam("data") String data) {
-	final CoffeeBatch coffeeBatch = readDomainObject(externalId);
-	return Response.ok(loadJsonStringFor(editBatch(coffeeBatch, data))).build();
-    }
-
-    @Service
-    private CoffeeBatch editBatch(CoffeeBatch coffeeBatch, String data) {
-	final JsonParser parser = new JsonParser();
-	final JsonObject jsonObject = parser.parse(data).getAsJsonObject();
-	final JsonArray orders = jsonObject.get("orders").getAsJsonArray();
-	for (final JsonElement order : orders) {
-	    CoffeeOrder coffeeOrder = readDomainObject(order.getAsString());
-	    coffeeBatch.addCoffeeOrder(coffeeOrder);
+	@GET
+	@Path("/{oid}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getOrderBatch(@PathParam("oid") String externalId) {
+		String responseString = loadJsonStringFromExternalId(externalId);
+		return Response.ok(responseString).build();
 	}
-	return coffeeBatch;
-    }
 
-    @DELETE
-    @Path("/{oid}")
-    @Service
-    public Response delete(@PathParam("oid") String externalId) {
-	CoffeeBatch batch = readDomainObject(externalId);
-	batch.delete();
-	return Response.ok().build();
-    }
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllBatches() {
+		return Response.ok(toJson("batches", CoffeeManager.getInstance().getBatch())).build();
+	}
 
-    @DELETE
-    @Path("/{oid}/{orderOid}")
-    @Service
-    public Response delete(@PathParam("oid") String externalId, @PathParam("orderOid") String orderOid) {
-	CoffeeBatch batch = readDomainObject(externalId);
-	CoffeeOrder coffeeOrder = readDomainObject(orderOid);
-	batch.removeCoffeeOrder(coffeeOrder);
-	return Response.ok().build();
-    }
+	// {orders : [oid1,oid2,...,oidN] }
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response newBatch(@FormParam("data") String data) {
+		return Response.ok(createFromJson(data, CoffeeBatch.class)).build();
+	}
+
+	@PUT
+	@Path("/{oid}")
+	public Response editBatch(@PathParam("oid") String externalId, @FormParam("data") String data) {
+		final CoffeeBatch coffeeBatch = readDomainObject(externalId);
+		return Response.ok(loadJsonStringFor(editBatch(coffeeBatch, data))).build();
+	}
+
+	@Service
+	private CoffeeBatch editBatch(CoffeeBatch coffeeBatch, String data) {
+		final JsonParser parser = new JsonParser();
+		final JsonObject jsonObject = parser.parse(data).getAsJsonObject();
+		final JsonArray orders = jsonObject.get("orders").getAsJsonArray();
+		for (final JsonElement order : orders) {
+			CoffeeOrder coffeeOrder = readDomainObject(order.getAsString());
+			coffeeBatch.addCoffeeOrder(coffeeOrder);
+		}
+		return coffeeBatch;
+	}
+
+	@DELETE
+	@Path("/{oid}")
+	@Service
+	public Response delete(@PathParam("oid") String externalId) {
+		CoffeeBatch batch = readDomainObject(externalId);
+		batch.delete();
+		return Response.ok().build();
+	}
+
+	@DELETE
+	@Path("/{oid}/{orderOid}")
+	@Service
+	public Response delete(@PathParam("oid") String externalId, @PathParam("orderOid") String orderOid) {
+		CoffeeBatch batch = readDomainObject(externalId);
+		CoffeeOrder coffeeOrder = readDomainObject(orderOid);
+		batch.removeCoffeeOrder(coffeeOrder);
+		return Response.ok().build();
+	}
 
 }

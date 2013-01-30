@@ -17,7 +17,9 @@ import pt.ist.fenixframework.pstm.AbstractDomainObject;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.sun.jersey.spi.container.servlet.PerSession;
 
+@PerSession
 public abstract class AbstractResource {
 
 	protected static BennuBoneGsonBuilder builder;
@@ -35,6 +37,7 @@ public abstract class AbstractResource {
 
 	protected CasConfig getCasConfig() {
 		if (request != null) {
+			System.out.println("Cas Config: " + request.getServerName());
 			return ConfigurationManager.getCasConfig(request.getServerName());
 		} else {
 			return null;
