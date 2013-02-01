@@ -1,26 +1,23 @@
 package pt.ist.bennu.coffee.manager.adapter;
 
-import pt.ist.bennu.bennu.core.rest.serializer.JsonSerializer;
-import pt.ist.bennu.bennu.core.rest.serializer.Serializer;
+import pt.ist.bennu.bennu.core.rest.mapper.AbstractJsonSerializer;
 import pt.ist.bennu.coffee.manager.domain.CoffeeBatch;
 import pt.ist.bennu.coffee.manager.domain.CoffeeItem;
+import pt.ist.bennu.coffee.manager.domain.CoffeeOrder;
+import pt.ist.bennu.coffee.manager.domain.CoffeeOrderEntry;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class CoffeeManagerJsonSerializer extends JsonSerializer {
+public final class CoffeeManagerJsonSerializer extends AbstractJsonSerializer {
 
-	private final Gson gson;
-	private Serializer delegate;
-
-	public CoffeeManagerJsonSerializer(Serializer delegate) {
+	public CoffeeManagerJsonSerializer() {
 		GsonBuilder builder = new GsonBuilder();
 		builder.serializeNulls();
 		builder.setPrettyPrinting();
-		builder.registerTypeAdapter(CoffeeBatch.class, new CoffeeBatchAdapter());
+		builder.registerTypeAdapter(CoffeeOrder.class, new CoffeeOrderAdapter());
 		builder.registerTypeAdapter(CoffeeItem.class, new CoffeeItemAdapter());
-		this.gson = builder.create();
-		setDelegate(delegate);
+		builder.registerTypeAdapter(CoffeeBatch.class, new CoffeeBatchAdapter());
+		builder.registerTypeAdapter(CoffeeOrderEntry.class, new CoffeeOrderEntrySerializer());
+		setGson(builder.create());
 	}
-
 }

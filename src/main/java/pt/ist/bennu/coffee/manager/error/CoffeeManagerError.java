@@ -2,7 +2,7 @@ package pt.ist.bennu.coffee.manager.error;
 
 import javax.ws.rs.core.Response.Status;
 
-import pt.ist.bennu.bennu.core.rest.RestError;
+import pt.ist.bennu.bennu.core.rest.mapper.RestError;
 
 public enum CoffeeManagerError implements RestError {
 
