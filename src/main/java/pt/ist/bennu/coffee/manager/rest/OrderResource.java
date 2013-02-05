@@ -13,7 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import pt.ist.bennu.bennu.core.rest.RestException;
+import pt.ist.bennu.bennu.core.rest.mapper.RestException;
 import pt.ist.bennu.coffee.manager.domain.CoffeeItem;
 import pt.ist.bennu.coffee.manager.domain.CoffeeOrder;
 import pt.ist.bennu.coffee.manager.domain.CoffeeOrderEntry;
