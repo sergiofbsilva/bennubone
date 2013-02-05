@@ -1,4 +1,4 @@
-package pt.ist.bennubone.coffee.domain;
+package pt.ist.bennu.coffee.manager.domain;
 
 valueType java.math.BigDecimal as BigDecimal {
     externalizeWith {
@@ -6,19 +6,12 @@ valueType java.math.BigDecimal as BigDecimal {
     }
 }
 
-class CoffeeManager;
-
-class User {
-    String name;
-    String email;
-    String passwordHash;
-    String salt;
-    String avatar;
-}
-
-class Role {
+class Person {
 	String name;
+	String email;
 }
+
+class CoffeeManager;
 
 class CoffeeItem {
     String name ( REQUIRED );
@@ -41,19 +34,18 @@ class CoffeeBatch {
 	BigDecimal shippingCharges;
 }
 
-relation UserPlaysRoles {
-	User playsRole user { multiplicity 0..*; }
-	Role playsRole role { multiplicity 0..*; }
+relation UserHavePersons {
+	.pt.ist.bennu.core.domain.User playsRole user { multiplicity 1..1; }
+	Person playsRole person { multiplicity 0..1; }
 }
 
-relation CoffeeManagerHasUsers {
-    CoffeeManager playsRole coffeeManager { multiplicity 1..1; }
-    User playsRole user { multiplicity 0..*; }
-}
-
-relation CoffeeManagerHasRoles {
-	CoffeeManager playsRole coffeeManager { multiplicity 1..1; }
-    Role playsRole role { multiplicity 0..*; }
+relation BennuCoffeeManager {
+	.pt.ist.bennu.core.domain.Bennu playsRole bennu {
+		multiplicity 1..1;
+	}
+	CoffeeManager playsRole coffeeManager {
+		multiplicity 0..1;
+	}
 }
 
 relation CoffeeManagerHasCoffeeItems {
@@ -77,7 +69,7 @@ relation CoffeeBatchesHaveCoffeeOrders {
 }
 
 relation UserMakesCoffeeOrders {
-    User playsRole user { multiplicity 1..1; }
+    .pt.ist.bennu.core.domain.User playsRole user { multiplicity 1..1; }
     CoffeeOrder playsRole coffeeOrder { multiplicity 0..*; }
 }
 
