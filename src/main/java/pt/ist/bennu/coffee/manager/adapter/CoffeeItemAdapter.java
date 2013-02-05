@@ -16,27 +16,27 @@ import com.google.gson.JsonSerializer;
 
 public class CoffeeItemAdapter implements JsonSerializer<CoffeeItem>, JsonDeserializer<CoffeeItem> {
 
-	@Override
-	public JsonElement serialize(CoffeeItem coffeeItem, Type type, JsonSerializationContext ctx) {
-		JsonObject jsonObject = new JsonObject();
-		jsonObject.addProperty("id", coffeeItem.getExternalId());
-		jsonObject.addProperty("name", coffeeItem.getName());
-		jsonObject.addProperty("imageUrl", coffeeItem.getImageUrl());
-		jsonObject.addProperty("unitPrice", coffeeItem.getUnitPrice());
-		jsonObject.addProperty("numUnits", coffeeItem.getNumUnits());
-		return jsonObject;
-	}
+    @Override
+    public JsonElement serialize(CoffeeItem coffeeItem, Type type, JsonSerializationContext ctx) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", coffeeItem.getExternalId());
+        jsonObject.addProperty("name", coffeeItem.getName());
+        jsonObject.addProperty("imageUrl", coffeeItem.getImageUrl());
+        jsonObject.addProperty("unitPrice", coffeeItem.getUnitPrice());
+        jsonObject.addProperty("numUnits", coffeeItem.getNumUnits());
+        return jsonObject;
+    }
 
-	@Override
-	@Service
-	public CoffeeItem deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		final JsonObject jsonObject = json.getAsJsonObject();
-		final String name = jsonObject.get("name").getAsString();
-		final String photo = jsonObject.get("imageUrl").getAsString();
-		final BigDecimal price = jsonObject.get("unitPrice").getAsBigDecimal();
-		final int units = jsonObject.get("units").getAsInt();
-		CoffeeItem item = new CoffeeItem(name, price, units);
-		item.setImageUrl(photo);
-		return item;
-	}
+    @Override
+    @Service
+    public CoffeeItem deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        final JsonObject jsonObject = json.getAsJsonObject();
+        final String name = jsonObject.get("name").getAsString();
+        final String photo = jsonObject.get("imageUrl").getAsString();
+        final BigDecimal price = jsonObject.get("unitPrice").getAsBigDecimal();
+        final int units = jsonObject.get("units").getAsInt();
+        CoffeeItem item = new CoffeeItem(name, price, units);
+        item.setImageUrl(photo);
+        return item;
+    }
 }

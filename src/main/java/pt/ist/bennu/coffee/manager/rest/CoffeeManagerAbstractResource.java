@@ -5,8 +5,8 @@ import pt.ist.bennu.coffee.manager.domain.CoffeeManager;
 
 public abstract class CoffeeManagerAbstractResource extends AbstractResource {
 
-	protected CoffeeManager getCoffeeManager() {
-		return CoffeeManager.getInstance();
-	}
+    protected CoffeeManager getCoffeeManager() {
+        return CoffeeManager.getInstance();
+    }
 
 }

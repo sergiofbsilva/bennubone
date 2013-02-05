@@ -26,64 +26,64 @@ import com.google.gson.JsonParser;
 @Path("/batches")
 public class OrderBatchResource extends CoffeeManagerAbstractResource {
 
-	@GET
-	@Path("/{oid}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getOrderBatch(@PathParam("oid") String externalId) {
-		return Response.ok(serializeFromExternalId(externalId)).build();
-	}
+    @GET
+    @Path("/{oid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOrderBatch(@PathParam("oid") String externalId) {
+        return Response.ok(serializeFromExternalId(externalId)).build();
+    }
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllBatches() {
-		Set<CoffeeBatch> coffeeBatchSet = CoffeeManager.getInstance().getBatchSet();
-		return Response.ok(serialize(coffeeBatchSet, "batches")).build();
-	}
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllBatches() {
+        Set<CoffeeBatch> coffeeBatchSet = CoffeeManager.getInstance().getBatchSet();
+        return Response.ok(serialize(coffeeBatchSet, "batches")).build();
+    }
 
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response newBatch(@FormParam("model") String jsonData) {
-		CoffeeBatch coffeeBatch = deserialize(jsonData, CoffeeBatch.class);
-		return Response.created(getURIFor(coffeeBatch, "batches")).build();
-	}
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response newBatch(@FormParam("model") String jsonData) {
+        CoffeeBatch coffeeBatch = deserialize(jsonData, CoffeeBatch.class);
+        return Response.created(getURIFor(coffeeBatch, "batches")).build();
+    }
 
-	@PUT
-	@Path("/{oid}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response editBatch(@PathParam("oid") String externalId, @FormParam("data") String data) {
-		final CoffeeBatch coffeeBatch = deserialize(data, CoffeeBatch.class, externalId);
-		return Response.ok(serialize(coffeeBatch)).build();
-	}
+    @PUT
+    @Path("/{oid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response editBatch(@PathParam("oid") String externalId, @FormParam("data") String data) {
+        final CoffeeBatch coffeeBatch = deserialize(data, CoffeeBatch.class, externalId);
+        return Response.ok(serialize(coffeeBatch)).build();
+    }
 
-	@Service
-	private CoffeeBatch editBatch(CoffeeBatch coffeeBatch, String data) {
-		final JsonParser parser = new JsonParser();
-		final JsonObject jsonObject = parser.parse(data).getAsJsonObject();
-		final JsonArray orders = jsonObject.get("orders").getAsJsonArray();
-		for (final JsonElement order : orders) {
-			CoffeeOrder coffeeOrder = readDomainObject(order.getAsString());
-			coffeeBatch.addCoffeeOrder(coffeeOrder);
-		}
-		return coffeeBatch;
-	}
+    @Service
+    private CoffeeBatch editBatch(CoffeeBatch coffeeBatch, String data) {
+        final JsonParser parser = new JsonParser();
+        final JsonObject jsonObject = parser.parse(data).getAsJsonObject();
+        final JsonArray orders = jsonObject.get("orders").getAsJsonArray();
+        for (final JsonElement order : orders) {
+            CoffeeOrder coffeeOrder = readDomainObject(order.getAsString());
+            coffeeBatch.addCoffeeOrder(coffeeOrder);
+        }
+        return coffeeBatch;
+    }
 
-	@DELETE
-	@Path("/{oid}")
-	@Service
-	public Response delete(@PathParam("oid") String externalId) {
-		CoffeeBatch batch = readDomainObject(externalId);
-		batch.delete();
-		return Response.ok().build();
-	}
+    @DELETE
+    @Path("/{oid}")
+    @Service
+    public Response delete(@PathParam("oid") String externalId) {
+        CoffeeBatch batch = readDomainObject(externalId);
+        batch.delete();
+        return Response.ok().build();
+    }
 
-	@DELETE
-	@Path("/{oid}/{orderOid}")
-	@Service
-	public Response delete(@PathParam("oid") String externalId, @PathParam("orderOid") String orderOid) {
-		CoffeeBatch batch = readDomainObject(externalId);
-		CoffeeOrder coffeeOrder = readDomainObject(orderOid);
-		batch.removeCoffeeOrder(coffeeOrder);
-		return Response.ok().build();
-	}
+    @DELETE
+    @Path("/{oid}/{orderOid}")
+    @Service
+    public Response delete(@PathParam("oid") String externalId, @PathParam("orderOid") String orderOid) {
+        CoffeeBatch batch = readDomainObject(externalId);
+        CoffeeOrder coffeeOrder = readDomainObject(orderOid);
+        batch.removeCoffeeOrder(coffeeOrder);
+        return Response.ok().build();
+    }
 
 }
