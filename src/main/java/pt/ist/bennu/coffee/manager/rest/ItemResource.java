@@ -24,22 +24,22 @@ public class ItemResource extends CoffeeManagerAbstractResource {
     @Path("/{oid}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getItem(@PathParam("oid") String oid) {
-        return Response.ok(serializeFromExternalId(oid)).build();
+        return Response.ok(view(readDomainObject(oid))).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllItems() {
         Set<CoffeeItem> coffeeItemSet = getCoffeeManager().getCoffeeItemSet();
-        return Response.ok(serialize(coffeeItemSet, "items")).build();
+        return Response.ok(view(coffeeItemSet, "items")).build();
     }
 
     @PUT
     @Path("/{oid}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response setItem(@PathParam("oid") String oid, @FormParam("data") String jsonData) {
-        final CoffeeItem item = deserialize(jsonData, CoffeeItem.class, oid);
-        return Response.ok(serialize(item)).build();
+        final CoffeeItem item = update(jsonData, (CoffeeItem) readDomainObject(oid));
+        return Response.ok(view(item)).build();
     }
 
     @Service
@@ -50,8 +50,8 @@ public class ItemResource extends CoffeeManagerAbstractResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response addItem(@FormParam("model") String jsonData) {
-        CoffeeItem newItem = deserialize(jsonData, CoffeeItem.class);
-        return Response.ok(serialize(newItem)).build();
+        CoffeeItem newItem = create(jsonData, CoffeeItem.class);
+        return Response.ok(view(newItem)).build();
     }
 
     @DELETE

@@ -33,33 +33,33 @@ public class OrderResource extends CoffeeManagerAbstractResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOrders() {
         User author = verifyAndGetRequestAuthor();
-        return Response.ok(serialize(author.getCoffeeOrderSet(), "orders")).build();
+        return Response.ok(view(author.getCoffeeOrderSet(), "orders")).build();
     }
 
     @GET
     @Path("/{oid}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOrder(@PathParam("oid") String externalId) {
-        return Response.ok(serializeFromExternalId(externalId)).build();
+    public Response getOrder(@PathParam("oid") String oid) {
+        return Response.ok(view(readDomainObject(oid))).build();
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response addOrder(@FormParam("model") String jsonData) {
         User author = verifyAndGetRequestAuthor();
-        CoffeeOrder coffeeOrder = deserialize(jsonData, CoffeeOrder.class);
+        CoffeeOrder coffeeOrder = create(jsonData, CoffeeOrder.class);
         coffeeOrder.setUser(author);
-        return Response.ok(serialize(coffeeOrder)).build();
+        return Response.ok(view(coffeeOrder)).build();
     }
 
     @PUT
     @Path("/{oid}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response putOrder(@PathParam("oid") String externalId, @FormParam("model") String jsonData) {
+    public Response putOrder(@PathParam("oid") String oid, @FormParam("model") String jsonData) {
         User author = verifyAndGetRequestAuthor();
-        CoffeeOrder coffeeOrder = deserialize(jsonData, CoffeeOrder.class, externalId);
+        CoffeeOrder coffeeOrder = update(jsonData, (CoffeeOrder) readDomainObject(oid));
         if (coffeeOrder.getUser().equals(author)) {
-            return Response.ok(serialize(coffeeOrder)).build();
+            return Response.ok(view(coffeeOrder)).build();
         } else {
             throw new RestException(CoffeeManagerError.CANNOT_MODIFY_OTHERS_ORDERS);
         }

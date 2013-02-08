@@ -1,42 +1,21 @@
 package pt.ist.bennu.coffee.manager.adapter;
 
-import java.lang.reflect.Type;
-
 import pt.ist.bennu.coffee.manager.domain.CoffeeItem;
 import pt.ist.bennu.coffee.manager.domain.CoffeeOrder;
 import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.service.Service;
+import pt.ist.bennu.json.JsonAdapter;
+import pt.ist.bennu.json.JsonBuilder;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.gson.JsonParser;
 
-public class CoffeeOrderAdapter implements JsonSerializer<CoffeeOrder>, JsonDeserializer<CoffeeOrder> {
+public class CoffeeOrderAdapter implements JsonAdapter<CoffeeOrder> {
 
     @Override
-    public JsonElement serialize(CoffeeOrder coffeeOrder, Type type, JsonSerializationContext ctx) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", coffeeOrder.getExternalId());
-        jsonObject.add("owner", ctx.serialize(coffeeOrder.getUser()));
-        jsonObject.add("entries", ctx.serialize(coffeeOrder.getEntry()));
-        jsonObject.addProperty("total", String.format("%.2f", coffeeOrder.getTotal()));
-        jsonObject.addProperty("boxes", coffeeOrder.getNumBoxes());
-        jsonObject.addProperty("count", coffeeOrder.getCount());
-        jsonObject.addProperty("batched", coffeeOrder.isBatched());
-        jsonObject.addProperty("sent", coffeeOrder.isSent());
-        return jsonObject;
-    }
-
-    // { "userId" : "12039102932", "entries" : [ { "itemId" : "1203902193", "quantity" : 5 } ] }
-    @Override
-    @Service
-    public CoffeeOrder deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        final JsonObject jsonObject = json.getAsJsonObject();
+    public CoffeeOrder create(String jsonData, JsonBuilder jsonRegistry) {
+        final JsonObject jsonObject = new JsonParser().parse(jsonData).getAsJsonObject();
         final String userId = jsonObject.get("userId").getAsString();
         final User user = User.fromExternalId(userId);
         final JsonArray entries = jsonObject.get("entries").getAsJsonArray();
@@ -48,5 +27,25 @@ public class CoffeeOrderAdapter implements JsonSerializer<CoffeeOrder>, JsonDese
             order.addEntry((CoffeeItem) CoffeeItem.fromExternalId(itemId), quantity);
         }
         return order;
+    }
+
+    @Override
+    public CoffeeOrder update(String jsonData, CoffeeOrder obj, JsonBuilder jsonRegistry) {
+        return null;
+    }
+
+    @Override
+    public JsonElement view(CoffeeOrder coffeeOrder, JsonBuilder ctx) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", coffeeOrder.getExternalId());
+        jsonObject.add("owner", ctx.view(coffeeOrder.getUser()));
+        jsonObject.add("entries", ctx.view(coffeeOrder.getEntry()));
+        jsonObject.addProperty("total", String.format("%.2f", coffeeOrder.getTotal()));
+        jsonObject.addProperty("boxes", coffeeOrder.getNumBoxes());
+        jsonObject.addProperty("count", coffeeOrder.getCount());
+        jsonObject.addProperty("batched", coffeeOrder.isBatched());
+        jsonObject.addProperty("sent", coffeeOrder.isSent());
+        return jsonObject;
+
     }
 }

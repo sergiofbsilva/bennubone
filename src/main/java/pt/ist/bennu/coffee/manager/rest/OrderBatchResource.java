@@ -29,30 +29,30 @@ public class OrderBatchResource extends CoffeeManagerAbstractResource {
     @GET
     @Path("/{oid}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOrderBatch(@PathParam("oid") String externalId) {
-        return Response.ok(serializeFromExternalId(externalId)).build();
+    public String getOrderBatch(@PathParam("oid") String oid) {
+        return view(readDomainObject(oid));
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllBatches() {
         Set<CoffeeBatch> coffeeBatchSet = CoffeeManager.getInstance().getBatchSet();
-        return Response.ok(serialize(coffeeBatchSet, "batches")).build();
+        return Response.ok(view(coffeeBatchSet, "batches")).build();
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response newBatch(@FormParam("model") String jsonData) {
-        CoffeeBatch coffeeBatch = deserialize(jsonData, CoffeeBatch.class);
+        CoffeeBatch coffeeBatch = create(jsonData, CoffeeBatch.class);
         return Response.created(getURIFor(coffeeBatch, "batches")).build();
     }
 
     @PUT
     @Path("/{oid}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response editBatch(@PathParam("oid") String externalId, @FormParam("data") String data) {
-        final CoffeeBatch coffeeBatch = deserialize(data, CoffeeBatch.class, externalId);
-        return Response.ok(serialize(coffeeBatch)).build();
+    public Response editBatch(@PathParam("oid") String oid, @FormParam("data") String data) {
+        final CoffeeBatch coffeeBatch = update(data, (CoffeeBatch) readDomainObject(oid));
+        return Response.ok(view(coffeeBatch)).build();
     }
 
     @Service

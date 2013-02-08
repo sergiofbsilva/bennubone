@@ -1,23 +1,20 @@
 package pt.ist.bennu.coffee.manager.adapter;
 
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 
 import pt.ist.bennu.coffee.manager.domain.CoffeeItem;
-import pt.ist.bennu.service.Service;
+import pt.ist.bennu.json.JsonBuilder;
+import pt.ist.bennu.json.JsonCreator;
+import pt.ist.bennu.json.JsonViewer;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.gson.JsonParser;
 
-public class CoffeeItemAdapter implements JsonSerializer<CoffeeItem>, JsonDeserializer<CoffeeItem> {
+public class CoffeeItemAdapter implements JsonCreator<CoffeeItem>, JsonViewer<CoffeeItem> {
 
     @Override
-    public JsonElement serialize(CoffeeItem coffeeItem, Type type, JsonSerializationContext ctx) {
+    public JsonElement view(CoffeeItem coffeeItem, JsonBuilder context) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", coffeeItem.getExternalId());
         jsonObject.addProperty("name", coffeeItem.getName());
@@ -28,9 +25,8 @@ public class CoffeeItemAdapter implements JsonSerializer<CoffeeItem>, JsonDeseri
     }
 
     @Override
-    @Service
-    public CoffeeItem deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        final JsonObject jsonObject = json.getAsJsonObject();
+    public CoffeeItem create(String jsonData, JsonBuilder jsonRegistry) {
+        final JsonObject jsonObject = new JsonParser().parse(jsonData).getAsJsonObject();
         final String name = jsonObject.get("name").getAsString();
         final String photo = jsonObject.get("imageUrl").getAsString();
         final BigDecimal price = jsonObject.get("unitPrice").getAsBigDecimal();

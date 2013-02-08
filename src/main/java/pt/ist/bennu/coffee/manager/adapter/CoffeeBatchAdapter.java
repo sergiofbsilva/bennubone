@@ -1,40 +1,22 @@
 package pt.ist.bennu.coffee.manager.adapter;
 
-import java.lang.reflect.Type;
-
 import pt.ist.bennu.coffee.manager.domain.CoffeeBatch;
 import pt.ist.bennu.coffee.manager.domain.CoffeeOrder;
-import pt.ist.bennu.service.Service;
+import pt.ist.bennu.json.JsonBuilder;
+import pt.ist.bennu.json.JsonCreator;
+import pt.ist.bennu.json.JsonViewer;
 import pt.ist.fenixframework.pstm.AbstractDomainObject;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.gson.JsonParser;
 
-public class CoffeeBatchAdapter implements JsonSerializer<CoffeeBatch>, JsonDeserializer<CoffeeBatch> {
+public class CoffeeBatchAdapter implements JsonViewer<CoffeeBatch>, JsonCreator<CoffeeBatch> {
 
     @Override
-    public JsonElement serialize(CoffeeBatch coffeeBatch, Type type, JsonSerializationContext ctx) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", coffeeBatch.getExternalId());
-        jsonObject.addProperty("shippingCharges", coffeeBatch.getShippingCharges());
-        jsonObject.addProperty("numCapsules", coffeeBatch.getTotalCount());
-        jsonObject.add("creationTimestamp", ctx.serialize(coffeeBatch.getCreationTimestamp()));
-        jsonObject.add("sentTimestamp", ctx.serialize(coffeeBatch.getSentTimestamp()));
-        jsonObject.add("receivedTimestamp", ctx.serialize(coffeeBatch.getReceivedTimestamp()));
-        jsonObject.add("orders", ctx.serialize(coffeeBatch.getCoffeeOrder()));
-        return jsonObject;
-    }
-
-    @Override
-    @Service
-    public CoffeeBatch deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        final JsonObject jsonObject = json.getAsJsonObject();
+    public CoffeeBatch create(String jsonData, JsonBuilder jsonRegistry) {
+        final JsonObject jsonObject = new JsonParser().parse(jsonData).getAsJsonObject();
         CoffeeBatch batch = new CoffeeBatch();
         final JsonArray orders = jsonObject.get("orders").getAsJsonArray();
         for (JsonElement order : orders) {
@@ -42,4 +24,18 @@ public class CoffeeBatchAdapter implements JsonSerializer<CoffeeBatch>, JsonDese
         }
         return batch;
     }
+
+    @Override
+    public JsonElement view(CoffeeBatch coffeeBatch, JsonBuilder ctx) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", coffeeBatch.getExternalId());
+        jsonObject.addProperty("shippingCharges", coffeeBatch.getShippingCharges());
+        jsonObject.addProperty("numCapsules", coffeeBatch.getTotalCount());
+        jsonObject.add("creationTimestamp", ctx.view(coffeeBatch.getCreationTimestamp()));
+        jsonObject.add("sentTimestamp", ctx.view(coffeeBatch.getSentTimestamp()));
+        jsonObject.add("receivedTimestamp", ctx.view(coffeeBatch.getReceivedTimestamp()));
+        jsonObject.add("orders", ctx.view(coffeeBatch.getCoffeeOrder()));
+        return jsonObject;
+    }
+
 }
