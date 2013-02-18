@@ -9,13 +9,11 @@ import pt.ist.bennu.json.JsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 public class CoffeeOrderAdapter implements JsonAdapter<CoffeeOrder> {
 
     @Override
-    public CoffeeOrder create(String jsonData, JsonBuilder jsonRegistry) {
-        final JsonObject jsonObject = new JsonParser().parse(jsonData).getAsJsonObject();
+    public CoffeeOrder create(JsonObject jsonObject, JsonBuilder jsonRegistry) {
         final String userId = jsonObject.get("userId").getAsString();
         final User user = User.fromExternalId(userId);
         final JsonArray entries = jsonObject.get("entries").getAsJsonArray();
@@ -27,11 +25,6 @@ public class CoffeeOrderAdapter implements JsonAdapter<CoffeeOrder> {
             order.addEntry((CoffeeItem) CoffeeItem.fromExternalId(itemId), quantity);
         }
         return order;
-    }
-
-    @Override
-    public CoffeeOrder update(String jsonData, CoffeeOrder obj, JsonBuilder jsonRegistry) {
-        return null;
     }
 
     @Override
@@ -47,5 +40,10 @@ public class CoffeeOrderAdapter implements JsonAdapter<CoffeeOrder> {
         jsonObject.addProperty("sent", coffeeOrder.isSent());
         return jsonObject;
 
+    }
+
+    @Override
+    public CoffeeOrder update(JsonObject json, CoffeeOrder obj, JsonBuilder jsonRegistry) {
+        return null;
     }
 }

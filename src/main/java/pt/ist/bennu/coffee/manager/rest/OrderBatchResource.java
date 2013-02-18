@@ -43,15 +43,16 @@ public class OrderBatchResource extends CoffeeManagerAbstractResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response newBatch(@FormParam("model") String jsonData) {
-        CoffeeBatch coffeeBatch = create(jsonData, CoffeeBatch.class);
-        return Response.created(getURIFor(coffeeBatch, "batches")).build();
+        final CoffeeBatch batch = create(jsonData, CoffeeBatch.class);
+        return Response.created(getURIFor(batch, "batches")).build();
     }
 
     @PUT
     @Path("/{oid}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response editBatch(@PathParam("oid") String oid, @FormParam("data") String data) {
-        final CoffeeBatch coffeeBatch = update(data, (CoffeeBatch) readDomainObject(oid));
+        final CoffeeBatch batch = readDomainObject(oid);
+        final CoffeeBatch coffeeBatch = update(data, batch);
         return Response.ok(view(coffeeBatch)).build();
     }
 

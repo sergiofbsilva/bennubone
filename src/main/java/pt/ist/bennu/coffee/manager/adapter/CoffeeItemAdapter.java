@@ -9,7 +9,6 @@ import pt.ist.bennu.json.JsonViewer;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 public class CoffeeItemAdapter implements JsonCreator<CoffeeItem>, JsonViewer<CoffeeItem> {
 
@@ -25,8 +24,7 @@ public class CoffeeItemAdapter implements JsonCreator<CoffeeItem>, JsonViewer<Co
     }
 
     @Override
-    public CoffeeItem create(String jsonData, JsonBuilder jsonRegistry) {
-        final JsonObject jsonObject = new JsonParser().parse(jsonData).getAsJsonObject();
+    public CoffeeItem create(JsonObject jsonObject, JsonBuilder jsonRegistry) {
         final String name = jsonObject.get("name").getAsString();
         final String photo = jsonObject.get("imageUrl").getAsString();
         final BigDecimal price = jsonObject.get("unitPrice").getAsBigDecimal();

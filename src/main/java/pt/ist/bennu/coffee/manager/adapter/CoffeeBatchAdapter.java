@@ -10,20 +10,8 @@ import pt.ist.fenixframework.pstm.AbstractDomainObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 public class CoffeeBatchAdapter implements JsonViewer<CoffeeBatch>, JsonCreator<CoffeeBatch> {
-
-    @Override
-    public CoffeeBatch create(String jsonData, JsonBuilder jsonRegistry) {
-        final JsonObject jsonObject = new JsonParser().parse(jsonData).getAsJsonObject();
-        CoffeeBatch batch = new CoffeeBatch();
-        final JsonArray orders = jsonObject.get("orders").getAsJsonArray();
-        for (JsonElement order : orders) {
-            batch.addCoffeeOrder((CoffeeOrder) AbstractDomainObject.fromExternalId(order.getAsString()));
-        }
-        return batch;
-    }
 
     @Override
     public JsonElement view(CoffeeBatch coffeeBatch, JsonBuilder ctx) {
@@ -36,6 +24,16 @@ public class CoffeeBatchAdapter implements JsonViewer<CoffeeBatch>, JsonCreator<
         jsonObject.add("receivedTimestamp", ctx.view(coffeeBatch.getReceivedTimestamp()));
         jsonObject.add("orders", ctx.view(coffeeBatch.getCoffeeOrder()));
         return jsonObject;
+    }
+
+    @Override
+    public CoffeeBatch create(JsonObject json, JsonBuilder jsonRegistry) {
+        CoffeeBatch batch = new CoffeeBatch();
+        final JsonArray orders = json.get("orders").getAsJsonArray();
+        for (JsonElement order : orders) {
+            batch.addCoffeeOrder((CoffeeOrder) AbstractDomainObject.fromExternalId(order.getAsString()));
+        }
+        return batch;
     }
 
 }
