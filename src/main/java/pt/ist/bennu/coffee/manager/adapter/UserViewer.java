@@ -20,46 +20,55 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
 public class UserViewer implements JsonViewer<User> {
-    private static Logger logger = LoggerFactory.getLogger(UserViewer.class);
 
-    private static final String url = ConfigurationManager.getProperty("fenixdata.url");
-    private static final String username = ConfigurationManager.getProperty("fenixdata.user");
-    private static final String password = ConfigurationManager.getProperty("fenixdata.pass");
-    private static final Client client = Client.create();
-    private static final JsonParser parser = new JsonParser();
+	private static Logger logger = LoggerFactory.getLogger(UserViewer.class);
 
-    @Service
-    public void populateUserPerson(User user) {
-        final String fenixdataUrl = url + user.getUsername();
-        final WebResource webResource = client.resource(fenixdataUrl + "&username=" + username + "&password=" + password);
+	private static final String url = ConfigurationManager
+			.getProperty("fenixdata.url");
+	private static final String username = ConfigurationManager
+			.getProperty("fenixdata.user");
+	private static final String password = ConfigurationManager
+			.getProperty("fenixdata.pass");
+	private static final Client client = Client.create();
+	private static final JsonParser parser = new JsonParser();
 
-        final ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
+	@Service
+	public void populateUserPerson(User user) {
 
-        if (response.getStatus() != 200) {
-            logger.warn("Status {} : Couldn't connect to {}", response.getStatus(), webResource.getURI());
-        } else {
-            final JsonElement jsonObject = parser.parse(response.getEntity(String.class));
-            final JsonObject asJsonObject = jsonObject.getAsJsonObject();
-            String name = asJsonObject.get("nickname").getAsString();
-            final JsonElement emailJsonElement = asJsonObject.get("email");
-            String email = emailJsonElement == null ? user.getUsername() + "@ist.utl.pt" : emailJsonElement.getAsString();
-            Person.newInstance(name, email, user);
-        }
+		final String fenixdataUrl = url + user.getUsername();
+		final WebResource webResource = client.resource(fenixdataUrl
+				+ "&username=" + username + "&password=" + password);
 
-    }
+		final ClientResponse response = webResource
+				.accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
 
-    @Override
-    public JsonElement view(User user, JsonBuilder context) {
-        if (!user.hasPerson()) {
-            populateUserPerson(user);
-        }
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", user.getExternalId());
-        jsonObject.addProperty("name", user.getPerson().getName());
-        jsonObject.addProperty("email", user.getPerson().getEmail());
-        jsonObject.addProperty("avatarUrl", user.getPerson().getAvatar());
-        jsonObject.addProperty("isCoffeeManager", true);
+		if (response.getStatus() != 200) {
+			logger.warn("Status {} : Couldn't connect to {}",
+					response.getStatus(), webResource.getURI());
+		} else {
+			final JsonElement jsonObject = parser.parse(response
+					.getEntity(String.class));
+			final JsonObject asJsonObject = jsonObject.getAsJsonObject();
+			String name = asJsonObject.get("nickname").getAsString();
+			final JsonElement emailJsonElement = asJsonObject.get("email");
+			String email = emailJsonElement == null ? user.getUsername()
+					+ "@ist.utl.pt" : emailJsonElement.getAsString();
+			Person.newInstance(name, email, user);
+		}
+	}
 
-        return jsonObject;
-    }
+	@Override
+	public JsonElement view(User user, JsonBuilder context) {
+		if (!user.hasPerson()) {
+			populateUserPerson(user);
+		}
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty("id", user.getExternalId());
+		jsonObject.addProperty("name", user.getPerson().getName());
+		jsonObject.addProperty("email", user.getPerson().getEmail());
+		jsonObject.addProperty("avatarUrl", user.getPerson().getAvatar());
+		jsonObject.addProperty("isCoffeeManager", true);
+
+		return jsonObject;
+	}
 }

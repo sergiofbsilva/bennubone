@@ -1,189 +1,44 @@
-CoffeeManager.Router.Main = Backbone.Router.extend({
+require(['jquery', 'jquery.bootstrap', 'backbone', 'mustache', 'marionette', 'app', 'router', 'coffee'], function($, jQueryBootstrap, Backbone, Mustache, Marionette, App, Router, Coffee) {
 
-	routes : {
-		"" : "verifyLogin",
-		"login" : "showLogin",
-		"home" : "showHome",
-		"orders" : "showCoffeeOrders",
-		"orders/:id" : "showCoffeeOrder",
-		"orders/edit/:id" : "editCoffeeOrder",
-		"order/create" : "createCoffeeOrder",
-		"users" : "showUsers",
-		"items" : "showCoffeeItems",
-		"items/create" : "createCoffeeItem",
-		"batches" : "showCoffeeBatches",
-		"batches/:id" : "showCoffeeBatch"
-	},
-	
-	showLogin : function () {
-		var that = this;
-		var settingsModel = new CoffeeManager.Model.ApplicationSettingsModel();
-		settingsModel.fetch({
-			success : function() {
-					if (settingsModel.get("casEnabled"))
-						window.location.href = settingsModel.get("loginUrl");
-					else
-						CoffeeManager.Util.renderTemplate("LoginView", $("body"));
-				}
-			});
-	},
-	
-	verifyLogin : function() {
-		var loginModel = new CoffeeManager.Model.LoginModel();
-		var that = this;
-		loginModel.fetch({
-			success : function() {
-				that.showHome(loginModel);
-			}
-		});
-	},
+    $.ajaxSetup({
+        statusCode : {
+            401 : function() {
+                // Redirect the to the login page.
+                App.router.navigate("login", true);
+            },
+            403 : function() {
+                // 403 -- Access denied
+                App.router.navigate("login", true);
+            }
+        }
+    });
 
-	initialize : function() {
-	},
+    Backbone.ajaxSync = Backbone.sync;
 
-	showHome : function(loginModel) {
-			var headerView = new CoffeeManager.View.HeaderView({ model : loginModel });
-			headerView.render();
-			var footerView = CoffeeManager.Util.getFooterView();
-			footerView.render();
-			var homeView = new CoffeeManager.View.HomeView();
-			homeView.render();
-	},
+    Backbone.customSync = function(method, model, option) {
+        option.beforeSend = function(jqXHR) {
+            if (localStorage.getItem("auth") != null) {
+                var auth = localStorage["auth"];
+                jqXHR.setRequestHeader('Authorization', 'Basic ' + auth);
+            }
+        };
+        return Backbone.ajaxSync(method, model, option);
+    }
 
-	createCoffeeOrder : function() {
-		var itemCollection = new CoffeeManager.Collection.CoffeeItemCollection();
-		itemCollection.fetch({
-			success : function() {
-				var createCoffeeOrderView = new CoffeeManager.View.CreateCoffeeOrderView({
-					collection : itemCollection
-				});
-				createCoffeeOrderView.render();
-			}
-		});
-	},
+    Backbone.sync = Backbone.customSync;
+    Backbone.emulateJSON = true;
 
-	showUsers : function() {
-		var userCollection = new CoffeeManager.Collection.UserCollection();
-		userCollection.fetch({
-			success : function() {
-				var userListView = new CoffeeManager.View.UserListView({
-					collection : userCollection
-				});
-				userListView.render();
-			}
-		});
-	},
+    Backbone.Marionette.Renderer.render = Mustache.to_html;
 
-	showUser : function(id) {
-		var userModel = new CoffeeManager.Model.UserModel({
-			id : id
-		});
-		userModel.fetch({
-			success : function() {
-				var userView = new CoffeeManager.View.UserView({
-					model : userModel
-				});
-				userView.render();
-			}
-		});
-	},
+    App.addRegions({
+        page: "body"
+    });
 
-	showCoffeeOrder : function(id) {
-		var coffeOrderModel = new CoffeeManager.Model.CoffeeOrderModel({
-			id : id
-		});
-		coffeOrderModel.fetch({
-			success : function() {
-				var coffeeOrderView = new CoffeeManager.View.CoffeeOrderView({
-					model : coffeOrderModel
-				});
-				coffeeOrderView.render();
-			}
-		});
-	},
+    App.addInitializer(function() {
+        Router.initialize();
+        Backbone.history.start();
+    });
 
-	editCoffeeOrder : function(id) {
-		var itemCollection = new CoffeeManager.Collection.CoffeeItemCollection();
-		itemCollection.fetch({
-			success : function() {
-				var editCoffeeOrderView = new CoffeeManager.View.EditCoffeeOrderView({
-					id : id,
-					collection : itemCollection
-				});
-				editCoffeeOrderView.render();
-			}
-		});
-	},
+    App.start();
 
-	showCoffeeOrders : function() {
-		var orderCollection = new CoffeeManager.Collection.CoffeeOrderCollection();
-		orderCollection.fetch({
-			success : function() {
-				var orderListView = new CoffeeManager.View.CoffeeOrderListView({
-					collection : orderCollection
-				});
-				orderListView.render();
-			}
-		});
-	},
-
-	showCoffeeBatch : function(id) {
-		var batchModel = new CoffeeManager.Model.CoffeeBatchModel({
-			id : id
-		});
-		batchModel.fetch({
-			success : function() {
-				var batchView = new CoffeeManager.View.CoffeeBatchView({
-					model : batchModel
-				});
-				batchView.render();
-			}
-		});
-	},
-
-	showCoffeeBatches : function() {
-		var batchCollection = new CoffeeManager.Collection.CoffeeBatchCollection();
-		batchCollection.fetch({
-			success : function() {
-				var batchListView = new CoffeeManager.View.CoffeeBatchListView({
-					collection : batchCollection
-				});
-				batchListView.render();
-			}
-		});
-	},
-
-	showCoffeeItems : function() {
-		var itemCollection = new CoffeeManager.Collection.CoffeeItemCollection();
-		itemCollection.fetch({
-			success : function() {
-				var itemListView = new CoffeeManager.View.CoffeeItemListView({
-					collection : itemCollection
-				});
-				itemListView.render();
-			}
-		});
-	},
-
-	createCoffeeItem : function() {
-		var createItemView = CoffeeManager.View.CreateCoffeeItemView();
-		createItemView.render();
-	}
 });
-
-CoffeeManager.Application = new CoffeeManager.Router.Main();
-Backbone.emulateJSON = true;
-
-Backbone.ajaxSync = Backbone.sync;
-
-Backbone.customSync = function(method, model, option) {
-	option.error = function(response, textStatus, errorThrown) {
-		if (response.status === 401) {
-			CoffeeManager.Application.navigate("login", true);
-		}
-	}
-	return Backbone.ajaxSync(method, model, option);
-}
-
-Backbone.sync = Backbone.customSync;
-Backbone.history.start();
